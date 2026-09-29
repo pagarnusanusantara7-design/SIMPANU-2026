@@ -1,0 +1,5412 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMPANU - Sistem Pembayaran UKT Pagar Nusa Bumi Panjalu</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-color: #1e3a8a;
+        --secondary-color: #f59e0b;
+        --accent-color: #3b82f6;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --dark-bg: #0f172a;
+        --card-bg: rgba(255, 255, 255, 0.08);
+        --text-light: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: var(--text-light);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* REVISI: Splash Screen */
+      .splash-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #1e293b 50%,
+          #1e3a8a 100%
+        );
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .splash-content {
+        text-align: center;
+        z-index: 10;
+        animation: fadeInUp 1.5s ease-out;
+      }
+
+      .splash-logo {
+        width: 180px;
+        height: 180px;
+        margin-bottom: 30px;
+        position: relative;
+        animation: pulse 2s infinite, rotateIn 1s ease-out;
+      }
+
+      .splash-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.5));
+      }
+
+      .splash-title {
+        font-family: "Poppins", sans-serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        background: linear-gradient(
+          135deg,
+          #f59e0b 0%,
+          #fbbf24 50%,
+          #f59e0b 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+        text-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+        letter-spacing: 2px;
+      }
+
+      .splash-subtitle {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.2rem;
+        font-weight: 300;
+        color: var(--text-muted);
+        margin-bottom: 40px;
+        letter-spacing: 1px;
+      }
+
+      .splash-loader {
+        width: 60px;
+        height: 60px;
+        position: relative;
+        margin: 0 auto;
+      }
+
+      .splash-loader-circle {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 3px solid transparent;
+        border-top-color: var(--secondary-color);
+        border-radius: 50%;
+        animation: spin 1.5s linear infinite;
+      }
+
+      .splash-loader-circle:nth-child(2) {
+        width: 80%;
+        height: 80%;
+        top: 10%;
+        left: 10%;
+        border-top-color: var(--accent-color);
+        animation: spin 2s linear infinite reverse;
+      }
+
+      .splash-loader-circle:nth-child(3) {
+        width: 60%;
+        height: 60%;
+        top: 20%;
+        left: 20%;
+        border-top-color: var(--success-color);
+        animation: spin 1s linear infinite;
+      }
+
+      .splash-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--secondary-color);
+        border-radius: 50%;
+        opacity: 0.3;
+        animation: float 15s infinite linear;
+      }
+
+      .particle:nth-child(1) {
+        left: 10%;
+        animation-delay: 0s;
+      }
+      .particle:nth-child(2) {
+        left: 20%;
+        animation-delay: 2s;
+      }
+      .particle:nth-child(3) {
+        left: 30%;
+        animation-delay: 4s;
+      }
+      .particle:nth-child(4) {
+        left: 40%;
+        animation-delay: 6s;
+      }
+      .particle:nth-child(5) {
+        left: 50%;
+        animation-delay: 8s;
+      }
+      .particle:nth-child(6) {
+        left: 60%;
+        animation-delay: 10s;
+      }
+      .particle:nth-child(7) {
+        left: 70%;
+        animation-delay: 12s;
+      }
+      .particle:nth-child(8) {
+        left: 80%;
+        animation-delay: 14s;
+      }
+      .particle:nth-child(9) {
+        left: 90%;
+        animation-delay: 16s;
+      }
+      .particle:nth-child(10) {
+        left: 15%;
+        animation-delay: 18s;
+      }
+      .particle:nth-child(11) {
+        left: 25%;
+        animation-delay: 20s;
+      }
+      .particle:nth-child(12) {
+        left: 35%;
+        animation-delay: 22s;
+      }
+      .particle:nth-child(13) {
+        left: 45%;
+        animation-delay: 24s;
+      }
+      .particle:nth-child(14) {
+        left: 55%;
+        animation-delay: 26s;
+      }
+      .particle:nth-child(15) {
+        left: 65%;
+        animation-delay: 28s;
+      }
+
+      .splash-progress {
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        text-align: center;
+      }
+
+      .splash-progress-bar {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+
+      .splash-progress-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--secondary-color),
+          var(--accent-color)
+        );
+        border-radius: 2px;
+        width: 0%;
+        animation: progress 3s ease-out forwards;
+      }
+
+      .splash-progress-text {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes rotateIn {
+        from {
+          transform: rotate(-180deg) scale(0.5);
+          opacity: 0;
+        }
+        to {
+          transform: rotate(0) scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) translateX(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.3;
+        }
+        90% {
+          opacity: 0.3;
+        }
+        100% {
+          transform: translateY(-100vh) translateX(100px);
+          opacity: 0;
+        }
+      }
+
+      @keyframes progress {
+        0% {
+          width: 0%;
+        }
+        100% {
+          width: 100%;
+        }
+      }
+
+      .bg-pattern {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+            circle at 20% 30%,
+            rgba(59, 130, 246, 0.1) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 80% 70%,
+            rgba(245, 158, 11, 0.1) 0%,
+            transparent 40%
+          );
+        z-index: -1;
+      }
+
+      /* Sidebar Navigation */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 260px;
+        background: linear-gradient(
+          180deg,
+          var(--primary-color) 0%,
+          #1e40af 100%
+        );
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar-header {
+        padding: 25px 20px;
+        border-bottom: 1px solid var(--border-color);
+        text-align: center;
+      }
+
+      .sidebar-brand {
+        font-weight: 700;
+        font-size: 1.6rem;
+        color: var(--secondary-color);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .sidebar-brand i {
+        margin-right: 12px;
+        font-size: 1.8rem;
+      }
+
+      .sidebar-menu {
+        padding: 20px 0;
+      }
+
+      .menu-item {
+        display: flex;
+        align-items: center;
+        padding: 16px 24px;
+        color: var(--text-light);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+        margin: 4px 0;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .menu-item:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--secondary-color);
+        border-left-color: var(--secondary-color);
+        transform: translateX(4px);
+      }
+
+      .menu-item.active {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: var(--secondary-color);
+        border-left-color: var(--secondary-color);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+      }
+
+      .menu-item i {
+        margin-right: 12px;
+        width: 20px;
+        text-align: center;
+        font-size: 1.1rem;
+      }
+
+      /* Main Content */
+      .main-content {
+        margin-left: 260px;
+        padding: 25px;
+        min-height: 100vh;
+        opacity: 0;
+        animation: fadeIn 1s ease-out 3.5s forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Mobile Toggle */
+      .mobile-toggle {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1001;
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        border: none;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 1.3rem;
+      }
+
+      /* Cards */
+      .glass-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        padding: 30px;
+        margin-bottom: 25px;
+        transition: all 0.3s ease;
+      }
+
+      .glass-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Dashboard Carousel */
+      .dashboard-carousel {
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.1) 0%,
+          rgba(245, 158, 11, 0.1) 100%
+        );
+      }
+
+      .carousel-item {
+        display: none;
+        animation: slideIn 0.6s ease;
+      }
+
+      .carousel-item.active {
+        display: block;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .carousel-controls {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 25px;
+        pointer-events: none;
+      }
+
+      .carousel-btn {
+        background: rgba(30, 58, 138, 0.8);
+        color: white;
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        pointer-events: all;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+      }
+
+      .carousel-btn:hover {
+        background: var(--accent-color);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      }
+
+      .carousel-indicators {
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px;
+      }
+
+      .indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .indicator.active {
+        background: var(--secondary-color);
+        width: 35px;
+        border-radius: 6px;
+        box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+      }
+
+      /* Stats Cards */
+      .stats-card {
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.15) 0%,
+          rgba(16, 185, 129, 0.15) 100%
+        );
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        border-color: rgba(59, 130, 246, 0.3);
+      }
+
+      .stats-icon {
+        font-size: 2.8rem;
+        margin-bottom: 15px;
+        color: var(--secondary-color);
+        text-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+      }
+
+      .stats-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--text-light);
+      }
+
+      .stats-label {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      /* Belt Color Cards */
+      .belt-card {
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.15) 0%,
+          rgba(16, 185, 129, 0.15) 100%
+        );
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .belt-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        border-color: rgba(59, 130, 246, 0.3);
+      }
+
+      .belt-icon {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+      }
+
+      .belt-green {
+        color: var(--success-color);
+      }
+      .belt-yellow {
+        color: var(--secondary-color);
+      }
+      .belt-red {
+        color: var(--danger-color);
+      }
+      .belt-white {
+        color: #f1f5f9;
+      }
+      .belt-citizen {
+        color: var(--text-muted);
+      }
+
+      .belt-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--text-light);
+      }
+
+      .belt-label {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      /* Payment Section */
+      .payment-display {
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.2) 0%,
+          rgba(16, 185, 129, 0.2) 100%
+        );
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+      }
+
+      .payment-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 18px;
+        padding-bottom: 18px;
+        border-bottom: 1px dashed var(--border-color);
+      }
+
+      .payment-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .payment-label {
+        font-size: 1.05rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      .payment-value {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      .payment-value.total {
+        color: var(--secondary-color);
+        font-size: 1.6rem;
+      }
+
+      .payment-value.excess {
+        color: var(--success-color);
+      }
+
+      .payment-value.shortage {
+        color: var(--warning-color);
+      }
+
+      /* Forms */
+      .form-control,
+      .form-select {
+        background-color: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--border-color);
+        color: var(--text-light);
+        border-radius: 10px;
+        padding: 14px 18px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        background-color: rgba(255, 255, 255, 0.12);
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+        color: var(--text-light);
+      }
+
+      .form-label {
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: var(--text-light);
+        font-size: 0.95rem;
+      }
+
+      /* Buttons */
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 100%
+        );
+        border: none;
+        padding: 12px 24px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+      }
+
+      .btn-success {
+        background: linear-gradient(
+          135deg,
+          var(--success-color) 0%,
+          #059669 100%
+        );
+        border: none;
+        padding: 12px 24px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+      }
+
+      .btn-warning {
+        background: linear-gradient(
+          135deg,
+          var(--warning-color) 0%,
+          #d97706 100%
+        );
+        border: none;
+        color: var(--dark-bg);
+        padding: 12px 24px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+      }
+
+      .btn-danger {
+        background: linear-gradient(
+          135deg,
+          var(--danger-color) 0%,
+          #dc2626 100%
+        );
+        border: none;
+        padding: 12px 24px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+      }
+
+      .btn-info {
+        background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+        border: none;
+        padding: 12px 24px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .btn-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(6, 182, 212, 0.4);
+      }
+
+      /* Tables */
+      .table {
+        color: var(--text-light);
+      }
+
+      .table thead th {
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.2) 0%,
+          rgba(16, 185, 129, 0.2) 100%
+        );
+        border-bottom: 2px solid var(--accent-color);
+        color: var(--secondary-color);
+        font-weight: 600;
+        padding: 15px 12px;
+        font-size: 0.9rem;
+      }
+
+      .table tbody tr {
+        border-bottom: 1px solid var(--border-color);
+        transition: background-color 0.3s ease;
+      }
+
+      .table tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      .table tbody td {
+        padding: 15px 12px;
+        font-size: 0.9rem;
+      }
+
+      /* Status Badges */
+      .badge {
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+
+      .badge-success {
+        background: linear-gradient(
+          135deg,
+          var(--success-color) 0%,
+          #059669 100%
+        );
+        color: white;
+      }
+
+      .badge-warning {
+        background: linear-gradient(
+          135deg,
+          var(--warning-color) 0%,
+          #d97706 100%
+        );
+        color: var(--dark-bg);
+      }
+
+      .badge-danger {
+        background: linear-gradient(
+          135deg,
+          var(--danger-color) 0%,
+          #dc2626 100%
+        );
+        color: white;
+      }
+
+      .badge-info {
+        background: linear-gradient(135deg, var(--info-color) 0%, #0891b2 100%);
+        color: white;
+      }
+
+      /* Toast */
+      .toast-container {
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        z-index: 1050;
+      }
+
+      .toast {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--accent-color) 100%
+        );
+        color: var(--text-light);
+        border-radius: 12px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--border-color);
+      }
+
+      .toast.success {
+        background: linear-gradient(
+          135deg,
+          var(--success-color) 0%,
+          #059669 100%
+        );
+      }
+
+      .toast.error {
+        background: linear-gradient(
+          135deg,
+          var(--danger-color) 0%,
+          #dc2626 100%
+        );
+      }
+
+      .toast.warning {
+        background: linear-gradient(
+          135deg,
+          var(--warning-color) 0%,
+          #d97706 100%
+        );
+        color: var(--dark-bg);
+      }
+
+      /* Loading */
+      .loading-spinner {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .spinner-border {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-width: 0.3rem;
+      }
+
+      /* Print Area - Thermal Receipt Style */
+      .print-area {
+        display: none;
+      }
+
+      /* REVISI: Gaya untuk Nota/Kwitansi */
+      .receipt-note {
+        width: 380px; /* Lebih lebar dari thermal */
+        margin: 0 auto;
+        padding: 30px;
+        background-color: white;
+        color: black;
+        font-family: "Courier New", monospace;
+        border: 1px solid #ddd;
+      }
+
+      .receipt-header {
+        text-align: center;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 15px;
+      }
+
+      .receipt-title {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .receipt-subtitle {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .receipt-body {
+        margin-bottom: 20px;
+      }
+
+      .receipt-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .receipt-divider {
+        border-top: 1px dashed #000;
+        margin: 15px 0;
+      }
+
+      .receipt-total {
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .receipt-footer {
+        margin-top: 30px; /* Beri jarak untuk tanda tangan */
+        font-size: 12px;
+        border-top: 1px dashed #000;
+        padding-top: 15px;
+      }
+
+      /* REVISI: Gaya untuk Tanda Tangan */
+      .signature-section {
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .signature-box {
+        text-align: center;
+        width: 45%;
+      }
+
+      .signature-line {
+        border-bottom: 1px solid #000;
+        margin-bottom: 5px;
+        height: 40px; /* Ruang untuk tanda tangan */
+      }
+
+      .signature-label {
+        font-size: 12px;
+      }
+
+      /* Notification Badge */
+      .notification-badge {
+        position: fixed;
+        top: 80px;
+        right: 25px;
+        background: linear-gradient(
+          135deg,
+          var(--warning-color) 0%,
+          #d97706 100%
+        );
+        color: var(--dark-bg);
+        padding: 15px 25px;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        display: none;
+        z-index: 1000;
+        animation: slideInRight 0.5s ease;
+        cursor: pointer;
+      }
+
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .notification-badge.show {
+        display: block;
+      }
+
+      /* REVISI: Logo Pagar Nusa */
+      .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        /* Tambahan untuk memastikan tidak ada background/efek */
+        background: none;
+        box-shadow: none;
+        border: none;
+      }
+
+      .logo-image {
+        width: 120px;
+        height: auto; /* penting agar gambar tidak dipaksa kotak */
+        border-radius: 0; /* hilangkan lingkaran */
+        object-fit: contain; /* biar gambar tetap proporsional */
+        margin-bottom: 15px;
+
+        /* Hilangkan border & shadow */
+        border: none;
+        box-shadow: none;
+      }
+
+      /* REVISI: Tampilan Struk Indomaret */
+      .indomaret-receipt {
+        width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: white;
+        color: black;
+        font-family: "Courier New", monospace;
+        border: 1px solid #ddd;
+      }
+
+      .indomaret-header {
+        text-align: center;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+      }
+
+      .indomaret-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .indomaret-subtitle {
+        font-size: 12px;
+        margin-bottom: 3px;
+      }
+
+      .indomaret-body {
+        margin-bottom: 15px;
+      }
+
+      .indomaret-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-size: 12px;
+      }
+
+      .indomaret-divider {
+        border-top: 1px dashed #000;
+        margin: 10px 0;
+      }
+
+      .indomaret-total {
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .indomaret-footer {
+        margin-top: 20px;
+        font-size: 10px;
+        border-top: 1px dashed #000;
+        padding-top: 10px;
+      }
+
+      /* REVISI: Tampilan Laporan PDF */
+      .pdf-header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .pdf-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .pdf-subtitle {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .pdf-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      .pdf-table th {
+        background-color: #f2f2f2;
+        padding: 8px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+
+      .pdf-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+      }
+
+      .pdf-summary {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f2f2f2;
+        border: 1px solid #ddd;
+      }
+
+      .pdf-summary-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .pdf-summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .pdf-signature {
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .pdf-signature-box {
+        text-align: center;
+        width: 45%;
+      }
+
+      .pdf-signature-line {
+        border-bottom: 1px solid #000;
+        margin-bottom: 5px;
+        height: 40px;
+      }
+
+      .pdf-signature-label {
+        font-size: 12px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+
+        .sidebar.active {
+          transform: translateX(0);
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+
+        .mobile-toggle {
+          display: block;
+        }
+
+        .glass-card {
+          padding: 20px;
+        }
+
+        .stats-card {
+          padding: 18px;
+        }
+
+        /* REVISI: Responsive Splash Screen */
+        .splash-title {
+          font-size: 2.5rem;
+        }
+
+        .splash-logo {
+          width: 150px;
+          height: 150px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .stats-card {
+          padding: 15px;
+        }
+
+        .stats-icon {
+          font-size: 2rem;
+        }
+
+        .stats-value {
+          font-size: 1.5rem;
+        }
+
+        .glass-card {
+          padding: 15px;
+        }
+
+        .belt-card {
+          padding: 15px;
+        }
+
+        .belt-icon {
+          font-size: 2rem;
+        }
+
+        .belt-value {
+          font-size: 1.5rem;
+        }
+
+        .table-responsive {
+          font-size: 0.8rem;
+        }
+
+        .btn {
+          padding: 8px 16px;
+          font-size: 0.8rem;
+        }
+
+        .modal-dialog {
+          margin: 0.5rem;
+        }
+
+        /* REVISI: Gaya untuk Nota di Mobile */
+        .receipt-note {
+          width: 100%;
+          padding: 20px;
+          font-size: 12px;
+        }
+
+        .receipt-title {
+          font-size: 18px;
+        }
+
+        .indomaret-receipt {
+          width: 100%;
+          padding: 15px;
+          font-size: 10px;
+        }
+
+        /* REVISI: Mobile Splash Screen */
+        .splash-title {
+          font-size: 2rem;
+        }
+
+        .splash-subtitle {
+          font-size: 1rem;
+        }
+
+        .splash-logo {
+          width: 120px;
+          height: 120px;
+        }
+
+        .splash-progress {
+          width: 250px;
+        }
+      }
+
+      /* REVISI: Tampilan Print */
+      @media print {
+        body {
+          background: white;
+          color: black;
+        }
+
+        .sidebar,
+        .mobile-toggle,
+        .notification-badge,
+        .toast-container,
+        .loading-spinner,
+        .carousel-controls,
+        .carousel-indicators,
+        .btn,
+        .form-control,
+        .form-select,
+        .splash-screen {
+          display: none !important;
+        }
+
+        .main-content {
+          margin-left: 0;
+          padding: 0;
+          opacity: 1;
+        }
+
+        .print-area {
+          display: block !important;
+        }
+
+        .page-content {
+          display: none !important;
+        }
+
+        .receipt-note,
+        .indomaret-receipt {
+          display: block !important;
+          page-break-after: always;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- REVISI: Splash Screen -->
+    <div class="splash-screen" id="splash-screen">
+      <div class="splash-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      </div>
+
+      <div class="splash-content">
+        <div class="splash-logo">
+          <img src="" alt=.>
+        </div>
+        <h1 class="splash-title">SIMPANU</h1>
+        <p class="splash-subtitle">Sistem Pembayaran Ujian Kenaikan Tingkat</p>
+        <p class="splash-subtitle">Pagar Nusa Bumi Panjalu</p>
+
+        <div class="splash-loader">
+          <div class="splash-loader-circle"></div>
+          <div class="splash-loader-circle"></div>
+          <div class="splash-loader-circle"></div>
+        </div>
+      </div>
+
+      <div class="splash-progress">
+        <div class="splash-progress-bar">
+          <div class="splash-progress-fill"></div>
+        </div>
+        <div class="splash-progress-text">Memuat sistem...</div>
+      </div>
+    </div>
+
+    <div class="bg-pattern"></div>
+
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" id="mobile-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Notification Badge -->
+    <div
+      class="notification-badge"
+      id="notification-badge"
+      onclick="showDPDetails()"
+    >
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      <span id="notification-text">Ada pembayaran DP yang belum lunas!</span>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <!-- REVISI: Logo Pagar Nusa -->
+        <div class="logo-container">
+          <img src="logo1.png" alt="Logo Pagar Nusa" class="logo-image" />
+          <div class="organization-name">SIMPANU</div>
+          <div class="system-name">Sistem Administrasi Pagar Nusa</div>
+        </div>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="#" class="menu-item active" data-page="dashboard">
+          <i class="fas fa-tachometer-alt"></i>
+          Dashboard
+        </a>
+        <a href="#" class="menu-item" data-page="registration">
+          <i class="fas fa-user-plus"></i>
+          Pendaftaran
+        </a>
+        <a href="#" class="menu-item" data-page="participants">
+          <i class="fas fa-users"></i>
+          Data Peserta
+        </a>
+        <a href="#" class="menu-item" data-page="administration">
+          <i class="fas fa-cogs"></i>
+          Administrasi
+        </a>
+        <a href="#" class="menu-item" data-page="reports">
+          <i class="fas fa-chart-bar"></i>
+          Laporan Data
+        </a>
+        <a href="#" class="menu-item" data-page="invoice">
+          <i class="fas fa-file-invoice"></i>
+          Cetak Struk/Invoice
+        </a>
+        <a href="#" class="menu-item" data-page="settings">
+          <i class="fas fa-cog"></i>
+          Pengaturan
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Page -->
+      <div id="dashboard-page" class="page-content">
+        <!-- REVISI: Opening yang Keren -->
+        <div class="dashboard-carousel glass-card">
+          <div class="carousel-item active">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <div class="logo-container">
+                  <img
+                    src="logo1.png"
+                    alt="Logo Pagar Nusa"
+                    class="logo-image"
+                  />
+                  <h2 class="organization-name">Pagar Nusa Bumi Panjalu</h2>
+                  <p class="system-name">
+                    Sistem Pembayaran Ujian Kenaikan Tingkat
+                  </p>
+                </div>
+                <p class="lead mt-3">
+                  Kelola seluruh proses pendaftaran dan pembayaran UKT dengan
+                  cara yang lebih mudah, lebih cepat, dan jauh lebih efisien
+                  melalui sistem yang dirancang untuk membantu administrasi
+                  berjalan tanpa hambatan.
+                </p>
+              </div>
+              <div class="col-md-6 text-center">
+                <i
+                  class="fas fa-shield-alt"
+                  style="font-size: 9rem; color: var(--secondary-color)"
+                ></i>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <h3>Total Pendaftar</h3>
+                <h1
+                  class="display-3"
+                  style="color: var(--secondary-color)"
+                  id="dashboard-total"
+                >
+                  0
+                </h1>
+                <p>Peserta telah mendaftar untuk UKT tahun ini</p>
+              </div>
+              <div class="col-md-6 text-center">
+                <i
+                  class="fas fa-users"
+                  style="font-size: 9rem; color: var(--secondary-color)"
+                ></i>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <h3>Total Pemasukan</h3>
+                <h1
+                  class="display-4"
+                  style="color: var(--secondary-color)"
+                  id="dashboard-income"
+                >
+                  Rp 0
+                </h1>
+                <p>Dari pendaftaran UKT saat ini</p>
+              </div>
+              <div class="col-md-6 text-center">
+                <i
+                  class="fas fa-money-bill-wave"
+                  style="font-size: 9rem; color: var(--secondary-color)"
+                ></i>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-controls">
+            <button class="carousel-btn" id="prev-btn">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn" id="next-btn">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="carousel-indicators">
+            <span class="indicator active" data-slide="0"></span>
+            <span class="indicator" data-slide="1"></span>
+            <span class="indicator" data-slide="2"></span>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mt-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="stats-value" id="stat-students">0</div>
+              <div class="stats-label">Total Siswa</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div class="stats-value" id="stat-citizens">0</div>
+              <div class="stats-label">Total Warga</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-building"></i>
+              </div>
+              <div class="stats-value" id="stat-branches">0</div>
+              <div class="stats-label">Total Ranting</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-calendar-check"></i>
+              </div>
+              <div class="stats-value" id="stat-transactions">0</div>
+              <div class="stats-label">Total Transaksi</div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-wallet"></i>
+              </div>
+              <div class="stats-value" id="stat-balance">Rp 0</div>
+              <div class="stats-label">Saldo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registration Page -->
+      <div id="registration-page" class="page-content" style="display: none">
+        <h2 class="mb-4">Pendaftaran UKT</h2>
+
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="glass-card">
+              <div
+                class="d-flex justify-content-between align-items-center mb-4"
+              >
+                <h3>Form Pendaftaran</h3>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-info" id="search-transaction-btn">
+                    <i class="fas fa-search"></i> Cari Transaksi
+                  </button>
+                  <button class="btn btn-warning" id="new-registration-btn">
+                    <i class="fas fa-plus"></i> Baru
+                  </button>
+                </div>
+              </div>
+
+              <!-- Search Section -->
+              <div id="search-section" style="display: none">
+                <div class="row mb-3">
+                  <div class="col-md-8">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="search-id-input"
+                      placeholder="Masukkan Nama Ranting"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <button
+                      class="btn btn-primary w-100"
+                      id="load-transaction-btn"
+                    >
+                      <i class="fas fa-search"></i> Cari
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <form id="registration-form">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="transaction-id" class="form-label"
+                      >ID Transaksi</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="transaction-id"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="branch-name" class="form-label"
+                      >Nama Ranting</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="branch-name"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="manager-name" class="form-label"
+                      >Nama Pengurus</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="manager-name"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="whatsapp-number" class="form-label"
+                      >Nomor WhatsApp</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="whatsapp-number"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Nomor WhatsApp tidak valid. Gunakan format +62xxx atau
+                      08xxx
+                    </div>
+                  </div>
+                </div>
+
+                <h4 class="mt-4 mb-3">Jumlah Peserta</h4>
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label for="green-count" class="form-label"
+                      >Sabuk Hijau</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="green-count"
+                      min="0"
+                      value="0"
+                    />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="yellow-count" class="form-label"
+                      >Sabuk Kuning</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="yellow-count"
+                      min="0"
+                      value="0"
+                    />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="red-count" class="form-label"
+                      >Sabuk Merah</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="red-count"
+                      min="0"
+                      value="0"
+                    />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="white-count" class="form-label"
+                      >Sabuk Putih</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="white-count"
+                      min="0"
+                      value="0"
+                    />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="citizen-count" class="form-label">Warga</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="citizen-count"
+                      min="0"
+                      value="0"
+                    />
+                  </div>
+                </div>
+
+                <div
+                  class="glass-card"
+                  style="background: rgba(245, 158, 11, 0.1)"
+                >
+                  <h4 class="mb-3">Ringkasan Pembayaran</h4>
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <label class="form-label">Total Peserta</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="total-participants"
+                        readonly
+                      />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label class="form-label">Total Pembayaran</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="total-payment"
+                        readonly
+                        style="
+                          font-size: 1.2rem;
+                          font-weight: bold;
+                          color: var(--secondary-color);
+                        "
+                      />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label class="form-label">Status Pembayaran</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="payment-status"
+                        readonly
+                        style="font-weight: bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn btn-warning" id="reset-btn">
+                    <i class="fas fa-redo"></i> Reset
+                  </button>
+                  <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i> Daftarkan
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="glass-card">
+              <h3 class="mb-4">Tarif Pembayaran</h3>
+              <div class="mb-3">
+                <label class="form-label">Tarif Siswa</label>
+                <div class="input-group">
+                  <span class="input-group-text">Rp</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="student-fee"
+                    value="65000"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Tarif Warga</label>
+                <div class="input-group">
+                  <span class="input-group-text">Rp</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="citizen-fee"
+                    value="115000"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div
+                class="alert alert-info"
+                style="
+                  background: rgba(59, 130, 246, 0.1);
+                  border-color: rgba(59, 130, 246, 0.3);
+                  color: var(--text-light);
+                "
+              >
+                <i class="fas fa-info-circle"></i> Untuk mengubah tarif, silakan
+                ke menu Administrasi
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participants Page -->
+      <div id="participants-page" class="page-content" style="display: none">
+        <h2 class="mb-4">Data Peserta</h2>
+
+        <div class="glass-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>Daftar Peserta UKT</h3>
+            <div class="d-flex align-items-center">
+              <div class="input-group me-2" style="max-width: 300px">
+                <span class="input-group-text"
+                  ><i class="fas fa-search"></i
+                ></span>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="search-participants"
+                  placeholder="Cari peserta..."
+                />
+              </div>
+              <select
+                class="form-select"
+                id="status-filter"
+                style="max-width: 150px"
+              >
+                <option value="">Semua Status</option>
+                <option value="unpaid">Belum Administrasi</option>
+                <option value="dp">DP</option>
+                <option value="paid">Lunas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <!-- REVISI: Tambahkan kolom baru -->
+                <tr>
+                  <th>ID Transaksi</th>
+                  <th>Nama Ranting</th>
+                  <th>Nama Pengurus</th>
+                  <th>No. WhatsApp</th>
+                  <th>Total Peserta</th>
+                  <th>Total Pembayaran</th>
+                  <th>Nominal Bayar</th>
+                  <th>DP</th>
+                  <th>Kurang</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="participants-table">
+                <!-- Participants data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Administration Page -->
+      <div id="administration-page" class="page-content" style="display: none">
+        <h2 class="mb-4">Administrasi</h2>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="glass-card">
+              <h3 class="mb-4">Pengaturan Tarif</h3>
+              <div class="mb-3">
+                <label for="admin-student-fee" class="form-label"
+                  >Tarif Siswa (Hijau/Kuning/Merah/Putih)</label
+                >
+                <div class="input-group">
+                  <span class="input-group-text">Rp</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="admin-student-fee"
+                    value="65000"
+                  />
+                  <button
+                    class="btn btn-warning"
+                    type="button"
+                    id="update-student-fee"
+                  >
+                    <i class="fas fa-sync"></i> Update
+                  </button>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="admin-citizen-fee" class="form-label"
+                  >Tarif Warga</label
+                >
+                <div class="input-group">
+                  <span class="input-group-text">Rp</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="admin-citizen-fee"
+                    value="115000"
+                  />
+                  <button
+                    class="btn btn-warning"
+                    type="button"
+                    id="update-citizen-fee"
+                  >
+                    <i class="fas fa-sync"></i> Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="glass-card">
+              <h3 class="mb-4">Manajemen Keuangan</h3>
+              <button
+                class="btn btn-primary w-100 mb-3"
+                data-bs-toggle="modal"
+                data-bs-target="#finance-modal"
+              >
+                <i class="fas fa-plus"></i> Tambah Transaksi Keuangan
+              </button>
+              <div class="row">
+                <div class="col-6">
+                  <div class="text-center">
+                    <h5>Total Pemasukan</h5>
+                    <h4 class="text-success" id="admin-total-income">Rp 0</h4>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="text-center">
+                    <h5>Total Pengeluaran</h5>
+                    <h4 class="text-danger" id="admin-total-expense">Rp 0</h4>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div class="text-center">
+                <h5>Saldo</h5>
+                <h3 class="text-warning" id="admin-balance">Rp 0</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Section -->
+        <div class="row mt-4">
+          <div class="col-lg-8">
+            <div class="glass-card">
+              <h3 class="mb-4">Pembayaran</h3>
+              <form id="payment-form">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="payment-transaction-select" class="form-label"
+                      >Pilih Transaksi</label
+                    >
+                    <select
+                      class="form-select"
+                      id="payment-transaction-select"
+                      required
+                    >
+                      <option value="">-- Pilih Transaksi --</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="payment-amount" class="form-label"
+                      >Jumlah yang Harus Dibayar</label
+                    >
+                    <div class="input-group">
+                      <span class="input-group-text">Rp</span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="payment-amount"
+                        readonly
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="payment-received" class="form-label"
+                      >Uang yang Diberikan</label
+                    >
+                    <div class="input-group">
+                      <span class="input-group-text">Rp</span>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="payment-received"
+                        min="0"
+                        placeholder="0"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="payment-change" class="form-label"
+                      >Kembalian</label
+                    >
+                    <div class="input-group">
+                      <span class="input-group-text">Rp</span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="payment-change"
+                        readonly
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="payment-display">
+                  <div class="payment-item">
+                    <span class="payment-label">Total Pembayaran:</span>
+                    <span class="payment-value total" id="display-total"
+                      >Rp 0</span
+                    >
+                  </div>
+                  <div class="payment-item">
+                    <span class="payment-label">Uang Diterima:</span>
+                    <span class="payment-value" id="display-received"
+                      >Rp 0</span
+                    >
+                  </div>
+                  <div class="payment-item">
+                    <span class="payment-label">Status:</span>
+                    <span class="payment-value" id="display-status"
+                      >Menunggu Pembayaran</span
+                    >
+                  </div>
+                  <div class="payment-item">
+                    <span class="payment-label">Sisa Pembayaran:</span>
+                    <span class="payment-value shortage" id="display-remaining"
+                      >Rp 0</span
+                    >
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                  <button
+                    type="button"
+                    class="btn btn-warning"
+                    id="reset-payment-btn"
+                  >
+                    <i class="fas fa-redo"></i> Reset
+                  </button>
+                  <div>
+                    <button
+                      type="button"
+                      class="btn btn-info me-2"
+                      id="print-thermal-btn"
+                    >
+                      <i class="fas fa-print"></i> Print Nota
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                      <i class="fas fa-save"></i> Proses Pembayaran
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="glass-card">
+              <h3 class="mb-4">Riwayat Pembayaran</h3>
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Total</th>
+                      <th>Diterima</th>
+                      <th>Kembali</th>
+                    </tr>
+                  </thead>
+                  <tbody id="payment-history">
+                    <!-- Payment history will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card mt-4">
+          <h3 class="mb-4">Riwayat Transaksi Keuangan</h3>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Keterangan</th>
+                  <th>Pemasukan</th>
+                  <th>Pengeluaran</th>
+                  <th>Saldo</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="finance-table">
+                <!-- Finance data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports Page -->
+      <div id="reports-page" class="page-content" style="display: none">
+        <h2 class="mb-4">Laporan Data</h2>
+
+        <!-- Belt Color Statistics -->
+        <div class="glass-card mb-4">
+          <h3 class="mb-4">Statistik Peserta per Sabuk</h3>
+          <div class="row">
+            <div class="col-lg-2 col-md-4 col-6">
+              <div class="belt-card">
+                <div class="belt-icon belt-green">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div class="belt-value" id="report-green-total">0</div>
+                <div class="belt-label">Sabuk Hijau</div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+              <div class="belt-card">
+                <div class="belt-icon belt-yellow">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div class="belt-value" id="report-yellow-total">0</div>
+                <div class="belt-label">Sabuk Kuning</div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+              <div class="belt-card">
+                <div class="belt-icon belt-red">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div class="belt-value" id="report-red-total">0</div>
+                <div class="belt-label">Sabuk Merah</div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+              <div class="belt-card">
+                <div class="belt-icon belt-white">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div class="belt-value" id="report-white-total">0</div>
+                <div class="belt-label">Sabuk Putih</div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+              <div class="belt-card">
+                <div class="belt-icon belt-citizen">
+                  <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="belt-value" id="report-citizen-total">0</div>
+                <div class="belt-label">Warga</div>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+              <div class="belt-card">
+                <div class="belt-icon">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div class="belt-value" id="report-all-total">0</div>
+                <div class="belt-label">Total Semua</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="stats-value" id="report-total-participants">0</div>
+              <div class="stats-label">Total Peserta</div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="stats-value" id="report-total-students">0</div>
+              <div class="stats-label">Total Siswa</div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div class="stats-value" id="report-total-citizens">0</div>
+              <div class="stats-label">Total Warga</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-lg-4">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="stats-value" id="report-total-income">Rp 0</div>
+              <div class="stats-label">Total Pemasukan</div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-money-bill-wave"></i>
+              </div>
+              <div class="stats-value" id="report-total-expense">Rp 0</div>
+              <div class="stats-label">Total Pengeluaran</div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="stats-card">
+              <div class="stats-icon">
+                <i class="fas fa-wallet"></i>
+              </div>
+              <div class="stats-value" id="report-balance">Rp 0</div>
+              <div class="stats-label">Saldo</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card mt-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>Laporan Peserta per Ranting</h3>
+            <div>
+              <button class="btn btn-info me-2" id="export-csv-btn">
+                <i class="fas fa-file-csv"></i> Export CSV
+              </button>
+              <button class="btn btn-danger" id="export-pdf-btn">
+                <i class="fas fa-file-pdf"></i> Export PDF
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Nama Ranting</th>
+                  <th>Hijau</th>
+                  <th>Kuning</th>
+                  <th>Merah</th>
+                  <th>Putih</th>
+                  <th>Warga</th>
+                  <th>Total Peserta</th>
+                  <th>Total Pembayaran</th>
+                  <th>Lunas</th>
+                </tr>
+              </thead>
+              <tbody id="reports-table">
+                <!-- Reports data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice Page -->
+      <div id="invoice-page" class="page-content" style="display: none">
+        <h2 class="mb-4">Cetak Struk/Invoice</h2>
+
+        <div class="glass-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>Pilih Transaksi</h3>
+            <div class="input-group" style="max-width: 300px">
+              <span class="input-group-text"
+                ><i class="fas fa-search"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control"
+                id="search-invoice"
+                placeholder="Cari transaksi..."
+              />
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>ID Transaksi</th>
+                  <th>Nama Ranting</th>
+                  <th>Nama Pengurus</th>
+                  <th>Total Peserta</th>
+                  <th>Total Pembayaran</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="invoice-table">
+                <!-- Invoice data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Page -->
+      <div id="settings-page" class="page-content" style="display: none">
+        <h2 class="mb-4">Pengaturan</h2>
+
+        <div class="glass-card">
+          <h3 class="mb-4">Informasi Organisasi</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="org-name" class="form-label">Nama Organisasi</label>
+              <input
+                type="text"
+                class="form-control"
+                id="org-name"
+                value="Pagar Nusa Bumi Panjalu"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="org-address" class="form-label"
+                >Alamat Organisasi</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="org-address"
+                value="Jl. Pagar Nusa No. 1, Bumi Panjalu"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="org-phone" class="form-label"
+                >Telepon Organisasi</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="org-phone"
+                value="(0265) 123456"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="org-email" class="form-label">Email Organisasi</label>
+              <input
+                type="email"
+                class="form-control"
+                id="org-email"
+                value="info@pagarnusabumipanjalu.or.id"
+              />
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <button class="btn btn-primary" id="save-settings-btn">
+              <i class="fas fa-save"></i> Simpan Pengaturan
+            </button>
+          </div>
+        </div>
+
+        <div class="glass-card mt-4">
+          <h3 class="mb-4">Pengelolaan Data</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <button class="btn btn-danger w-100" id="clear-transactions-btn">
+                <i class="fas fa-trash"></i> Hapus Semua Data Transaksi
+              </button>
+            </div>
+            <div class="col-md-6 mb-3">
+              <button class="btn btn-danger w-100" id="clear-finance-btn">
+                <i class="fas fa-trash"></i> Hapus Semua Data Keuangan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card mt-4">
+          <h3 class="mb-4">Backup & Restore Data</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <button class="btn btn-info w-100" id="backup-data-btn">
+                <i class="fas fa-download"></i> Backup Data
+              </button>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="restore-data-input" class="form-label"
+                >Restore dari File</label
+              >
+              <input
+                type="file"
+                class="form-control"
+                id="restore-data-input"
+                accept=".json"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Finance Modal -->
+    <div class="modal fade" id="finance-modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content" style="background-color: var(--dark-bg)">
+          <div class="modal-header">
+            <h5 class="modal-title">Tambah Transaksi Keuangan</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="finance-form">
+              <div class="mb-3">
+                <label for="finance-date" class="form-label">Tanggal</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="finance-date"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="finance-description" class="form-label"
+                  >Keterangan</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="finance-description"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="finance-type" class="form-label"
+                  >Jenis Transaksi</label
+                >
+                <select class="form-select" id="finance-type" required>
+                  <option value="">Pilih Jenis Transaksi</option>
+                  <option value="income">Pemasukan</option>
+                  <option value="expense">Pengeluaran</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="finance-amount" class="form-label">Jumlah</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="finance-amount"
+                  min="0"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Batal
+            </button>
+            <button type="button" class="btn btn-primary" id="save-finance-btn">
+              <i class="fas fa-save"></i> Simpan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVISI: Modal untuk Edit Data Susulan -->
+    <div class="modal fade" id="edit-modal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background-color: var(--dark-bg)">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Data Susulan</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="edit-form">
+              <input type="hidden" id="edit-transaction-id" />
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="edit-branch-name" class="form-label"
+                    >Nama Ranting</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="edit-branch-name"
+                    readonly
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="edit-manager-name" class="form-label"
+                    >Nama Pengurus</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="edit-manager-name"
+                    readonly
+                  />
+                </div>
+              </div>
+
+              <h5 class="mb-3">Tambah/Ubah Jumlah Peserta</h5>
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label for="edit-green-count" class="form-label"
+                    >Sabuk Hijau</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="edit-green-count"
+                    min="0"
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="edit-yellow-count" class="form-label"
+                    >Sabuk Kuning</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="edit-yellow-count"
+                    min="0"
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="edit-red-count" class="form-label"
+                    >Sabuk Merah</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="edit-red-count"
+                    min="0"
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="edit-white-count" class="form-label"
+                    >Sabuk Putih</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="edit-white-count"
+                    min="0"
+                  />
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="edit-citizen-count" class="form-label"
+                    >Warga</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="edit-citizen-count"
+                    min="0"
+                  />
+                </div>
+              </div>
+
+              <div
+                class="glass-card"
+                style="background: rgba(245, 158, 11, 0.1)"
+              >
+                <h5 class="mb-3">Ringkasan Baru</h5>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Total Peserta Baru</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="edit-total-participants"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label">Total Pembayaran Baru</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="edit-total-payment"
+                      readonly
+                      style="
+                        font-size: 1.2rem;
+                        font-weight: bold;
+                        color: var(--secondary-color);
+                      "
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Batal
+            </button>
+            <button type="button" class="btn btn-warning" id="save-edit-btn">
+              <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Print Area - Nota/Kwitansi Style -->
+    <div class="print-area">
+      <!-- REVISI: Tampilan Struk Indomaret -->
+      <div class="indomaret-receipt" id="indomaret-receipt">
+        <!-- Receipt content will be generated here -->
+      </div>
+
+      <!-- REVISI: Tampilan Nota/Kwitansi -->
+      <div class="receipt-note" id="receipt-note">
+        <!-- Receipt content will be generated here -->
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner">
+      <div class="spinner-border text-warning" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- AutoTable -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+      // REVISI: Splash Screen Management
+      let splashTimeout;
+
+      function hideSplashScreen() {
+        const splashScreen = document.getElementById("splash-screen");
+        const progressText = document.querySelector(".splash-progress-text");
+
+        // Update progress text
+        progressText.textContent = "Sistem siap!";
+
+        // Fade out splash screen
+        setTimeout(() => {
+          splashScreen.style.opacity = "0";
+          splashScreen.style.transition = "opacity 0.5s ease-out";
+
+          setTimeout(() => {
+            splashScreen.style.display = "none";
+          }, 500);
+        }, 500);
+      }
+
+      // Update splash progress text
+      function updateSplashProgress() {
+        const progressText = document.querySelector(".splash-progress-text");
+        const messages = [
+          "Memuat sistem...",
+          "Menginisialisasi database...",
+          "Memuat konfigurasi...",
+          "Menyiapkan antarmuka...",
+          "Sistem siap!",
+        ];
+
+        let messageIndex = 0;
+        const interval = setInterval(() => {
+          if (messageIndex < messages.length - 1) {
+            progressText.textContent = messages[messageIndex];
+            messageIndex++;
+          } else {
+            clearInterval(interval);
+          }
+        }, 600);
+      }
+
+      // Initialize splash screen
+      function initSplashScreen() {
+        updateSplashProgress();
+
+        // Hide splash screen after 3.5 seconds
+        splashTimeout = setTimeout(() => {
+          hideSplashScreen();
+        }, 3500);
+      }
+
+      // Application State
+      const app = {
+        currentPage: "dashboard",
+        transactions: [],
+        financeRecords: [],
+        paymentHistory: [],
+        fees: {
+          student: 65000,
+          citizen: 115000,
+        },
+        settings: {
+          orgName: "Pagar Nusa Bumi Panjalu",
+          orgAddress: "Jl. Pagar Nusa No. 1, Bumi Panjalu",
+          orgPhone: "(0265) 123456",
+          orgEmail: "info@pagarnusabumipanjalu.or.id",
+        },
+        carouselIndex: 0,
+        currentTransaction: null,
+        isEditing: false,
+      };
+
+      // Initialize Application
+      function init() {
+        // Initialize splash screen first
+        initSplashScreen();
+
+        // Load data after splash screen starts
+        loadDataFromStorage();
+        setupEventListeners();
+        updateAllStatistics();
+        loadSettings();
+        checkDPNotifications();
+
+        // Start carousel after splash screen
+        setTimeout(() => {
+          startCarousel();
+        }, 3500);
+      }
+
+      // Load data from localStorage
+      function loadDataFromStorage() {
+        // Load transactions
+        const savedTransactions = localStorage.getItem("simpantu_transactions");
+        if (savedTransactions) {
+          app.transactions = decryptData(savedTransactions) || [];
+        }
+
+        // Load finance records
+        const savedFinanceRecords = localStorage.getItem("simpantu_finance");
+        if (savedFinanceRecords) {
+          app.financeRecords = decryptData(savedFinanceRecords) || [];
+        }
+
+        // Load payment history
+        const savedPaymentHistory = localStorage.getItem("simpantu_payments");
+        if (savedPaymentHistory) {
+          app.paymentHistory = decryptData(savedPaymentHistory) || [];
+        }
+
+        // Load fees
+        const savedFees = localStorage.getItem("simpantu_fees");
+        if (savedFees) {
+          app.fees = JSON.parse(savedFees);
+        }
+
+        // Load settings
+        const savedSettings = localStorage.getItem("simpantu_settings");
+        if (savedSettings) {
+          app.settings = JSON.parse(savedSettings);
+        }
+      }
+
+      // Save data to localStorage
+      function saveDataToStorage() {
+        localStorage.setItem(
+          "simpantu_transactions",
+          encryptData(app.transactions)
+        );
+        localStorage.setItem(
+          "simpantu_finance",
+          encryptData(app.financeRecords)
+        );
+        localStorage.setItem(
+          "simpantu_payments",
+          encryptData(app.paymentHistory)
+        );
+        localStorage.setItem("simpantu_fees", JSON.stringify(app.fees));
+        localStorage.setItem("simpantu_settings", JSON.stringify(app.settings));
+      }
+
+      // Check DP notifications
+      function checkDPNotifications() {
+        const dpTransactions = app.transactions.filter(
+          (t) => t.status === "dp"
+        );
+        if (dpTransactions.length > 0) {
+          showNotificationBadge(
+            `${dpTransactions.length} pembayaran DP yang belum lunas!`
+          );
+        } else {
+          hideNotificationBadge();
+        }
+      }
+
+      // Generate transaction ID based on branch name
+      function generateTransactionId(branchName) {
+        if (!branchName) return "PN-UNKNOWN";
+
+        // Clean branch name for ID (remove spaces and special characters)
+        const cleanBranch = branchName
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .toUpperCase();
+
+        // Count existing transactions for this branch
+        const existingTransactions = app.transactions.filter(
+          (t) => t.branchName.toLowerCase() === branchName.toLowerCase()
+        );
+
+        return `PN-${cleanBranch}-${(existingTransactions.length + 1)
+          .toString()
+          .padStart(3, "0")}`;
+      }
+
+      // Update transaction ID when branch name changes
+      function updateTransactionId() {
+        const branchName = document.getElementById("branch-name").value;
+        if (branchName) {
+          document.getElementById("transaction-id").value =
+            generateTransactionId(branchName);
+        } else {
+          document.getElementById("transaction-id").value = "";
+        }
+      }
+
+      // Update fees in all parts of app
+      function updateFees() {
+        document.getElementById("student-fee").value = app.fees.student;
+        document.getElementById("citizen-fee").value = app.fees.citizen;
+        document.getElementById("admin-student-fee").value = app.fees.student;
+        document.getElementById("admin-citizen-fee").value = app.fees.citizen;
+      }
+
+      // Setup event listeners
+      function setupEventListeners() {
+        // Mobile toggle
+        document
+          .getElementById("mobile-toggle")
+          .addEventListener("click", () => {
+            document.getElementById("sidebar").classList.toggle("active");
+          });
+
+        // Menu navigation
+        document.querySelectorAll(".menu-item").forEach((item) => {
+          item.addEventListener("click", (e) => {
+            e.preventDefault();
+            const page = item.getAttribute("data-page");
+            confirmNavigation(page);
+
+            // Update active menu
+            document
+              .querySelectorAll(".menu-item")
+              .forEach((mi) => mi.classList.remove("active"));
+            item.classList.add("active");
+
+            // Close mobile menu
+            if (window.innerWidth <= 768) {
+              document.getElementById("sidebar").classList.remove("active");
+            }
+          });
+        });
+
+        // Form submission
+        document
+          .getElementById("registration-form")
+          .addEventListener("submit", handleRegistrationSubmit);
+        document
+          .getElementById("payment-form")
+          .addEventListener("submit", handlePaymentSubmit);
+
+        // Search and new buttons
+        document
+          .getElementById("search-transaction-btn")
+          .addEventListener("click", showSearchSection);
+        document
+          .getElementById("new-registration-btn")
+          .addEventListener("click", hideSearchSection);
+        document
+          .getElementById("load-transaction-btn")
+          .addEventListener("click", loadTransactionByBranch);
+
+        // Participant count inputs
+        [
+          "green-count",
+          "yellow-count",
+          "red-count",
+          "white-count",
+          "citizen-count",
+        ].forEach((id) => {
+          document
+            .getElementById(id)
+            .addEventListener("input", calculateRegistrationSummary);
+        });
+
+        // Branch name input for ID generation
+        document
+          .getElementById("branch-name")
+          .addEventListener("input", updateTransactionId);
+
+        // Payment form inputs
+        document
+          .getElementById("payment-transaction-select")
+          .addEventListener("change", loadTransactionDetails);
+        document
+          .getElementById("payment-received")
+          .addEventListener("input", calculatePaymentChange);
+
+        // Fee update buttons
+        document
+          .getElementById("update-student-fee")
+          .addEventListener("click", updateStudentFee);
+        document
+          .getElementById("update-citizen-fee")
+          .addEventListener("click", updateCitizenFee);
+
+        // Search inputs with debouncing
+        document
+          .getElementById("search-participants")
+          .addEventListener("input", debounce(advancedSearch, 300));
+        document
+          .getElementById("search-invoice")
+          .addEventListener("input", debounce(filterInvoices, 300));
+
+        // Status filter
+        document
+          .getElementById("status-filter")
+          .addEventListener("change", advancedSearch);
+
+        // Export buttons
+        document
+          .getElementById("export-csv-btn")
+          .addEventListener("click", exportToCSV);
+        document
+          .getElementById("export-pdf-btn")
+          .addEventListener("click", exportToPDF);
+
+        // Print thermal button
+        document
+          .getElementById("print-thermal-btn")
+          .addEventListener("click", printReceipt);
+
+        // Finance form
+        document
+          .getElementById("save-finance-btn")
+          .addEventListener("click", saveFinanceRecord);
+
+        // Settings
+        document
+          .getElementById("save-settings-btn")
+          .addEventListener("click", saveSettings);
+
+        // Clear data buttons
+        document
+          .getElementById("clear-transactions-btn")
+          .addEventListener("click", clearTransactions);
+        document
+          .getElementById("clear-finance-btn")
+          .addEventListener("click", clearFinanceRecords);
+
+        // Backup and Restore
+        document
+          .getElementById("backup-data-btn")
+          .addEventListener("click", backupData);
+        document
+          .getElementById("restore-data-input")
+          .addEventListener("change", restoreData);
+
+        // REVISI: Event listener untuk modal edit
+        document
+          .getElementById("save-edit-btn")
+          .addEventListener("click", handleEditSubmit);
+        [
+          "edit-green-count",
+          "edit-yellow-count",
+          "edit-red-count",
+          "edit-white-count",
+          "edit-citizen-count",
+        ].forEach((id) => {
+          document
+            .getElementById(id)
+            .addEventListener("input", calculateEditSummary);
+        });
+
+        // Carousel controls
+        document
+          .getElementById("prev-btn")
+          .addEventListener("click", () => changeCarousel(-1));
+        document
+          .getElementById("next-btn")
+          .addEventListener("click", () => changeCarousel(1));
+
+        // Carousel indicators
+        document.querySelectorAll(".indicator").forEach((indicator, index) => {
+          indicator.addEventListener("click", () => goToSlide(index));
+        });
+      }
+
+      // Debounce function
+      function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+          const context = this;
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+      }
+
+      // Show page with confirmation
+      function confirmNavigation(page) {
+        if (
+          app.currentPage === "registration" &&
+          document.getElementById("registration-form").checkValidity()
+        ) {
+          if (
+            confirm(
+              "Apakah Anda yakin ingin pindah halaman? Data yang belum disimpan akan hilang."
+            )
+          ) {
+            showPage(page);
+          }
+        } else {
+          showPage(page);
+        }
+      }
+
+      // Show page
+      function showPage(pageName) {
+        // Hide all pages
+        document.querySelectorAll(".page-content").forEach((page) => {
+          page.style.display = "none";
+        });
+
+        // Show selected page
+        const selectedPage = document.getElementById(`${pageName}-page`);
+        if (selectedPage) {
+          selectedPage.style.display = "block";
+          app.currentPage = pageName;
+
+          // Load page-specific data
+          switch (pageName) {
+            case "dashboard":
+              updateDashboardStats();
+              break;
+            case "participants":
+              renderParticipantsTable();
+              break;
+            case "administration":
+              renderFinanceTable();
+              renderPaymentHistory();
+              updateAdministrationStats();
+              loadPaymentTransactions();
+              break;
+            case "reports":
+              updateReportStats();
+              renderReportsTable();
+              break;
+            case "invoice":
+              renderInvoiceTable();
+              break;
+            case "settings":
+              loadSettings();
+              break;
+          }
+        }
+      }
+
+      // Carousel functions
+      function startCarousel() {
+        setInterval(() => {
+          changeCarousel(1);
+        }, 5000);
+      }
+
+      function changeCarousel(direction) {
+        const items = document.querySelectorAll(".carousel-item");
+        const indicators = document.querySelectorAll(".indicator");
+
+        items[app.carouselIndex].classList.remove("active");
+        indicators[app.carouselIndex].classList.remove("active");
+
+        app.carouselIndex += direction;
+
+        if (app.carouselIndex >= items.length) {
+          app.carouselIndex = 0;
+        } else if (app.carouselIndex < 0) {
+          app.carouselIndex = items.length - 1;
+        }
+
+        items[app.carouselIndex].classList.add("active");
+        indicators[app.carouselIndex].classList.add("active");
+      }
+
+      function goToSlide(index) {
+        const items = document.querySelectorAll(".carousel-item");
+        const indicators = document.querySelectorAll(".indicator");
+
+        items[app.carouselIndex].classList.remove("active");
+        indicators[app.carouselIndex].classList.remove("active");
+
+        app.carouselIndex = index;
+
+        items[app.carouselIndex].classList.add("active");
+        indicators[app.carouselIndex].classList.add("active");
+      }
+
+      // Calculate registration summary
+      function calculateRegistrationSummary() {
+        const green =
+          parseInt(document.getElementById("green-count").value) || 0;
+        const yellow =
+          parseInt(document.getElementById("yellow-count").value) || 0;
+        const red = parseInt(document.getElementById("red-count").value) || 0;
+        const white =
+          parseInt(document.getElementById("white-count").value) || 0;
+        const citizen =
+          parseInt(document.getElementById("citizen-count").value) || 0;
+
+        const totalStudents = green + yellow + red + white;
+        const totalParticipants = totalStudents + citizen;
+        const totalPayment =
+          totalStudents * app.fees.student + citizen * app.fees.citizen;
+
+        // Update summary elements
+        document.getElementById("total-participants").value = totalParticipants;
+        document.getElementById("total-payment").value =
+          formatCurrency(totalPayment);
+
+        // Update payment status if editing
+        if (app.isEditing && app.currentTransaction) {
+          updatePaymentStatus();
+        } else {
+          document.getElementById("payment-status").value =
+            "Belum Administrasi";
+          document.getElementById("payment-status").style.color = "#ef4444";
+          document.getElementById("payment-status").style.fontWeight = "bold";
+        }
+      }
+
+      // Validate WhatsApp number
+      function validateWhatsAppNumber() {
+        const whatsappInput = document.getElementById("whatsapp-number");
+        const whatsappNumber = whatsappInput.value.trim();
+
+        // Format Indonesia: +62xxx atau 08xxx
+        const regex = /^(\+62|62|0)8[0-9]{8,12}$/;
+
+        if (!regex.test(whatsappNumber)) {
+          whatsappInput.setCustomValidity(
+            "Nomor WhatsApp tidak valid. Gunakan format +62xxx atau 08xxx"
+          );
+          return false;
+        } else {
+          whatsappInput.setCustomValidity("");
+          return true;
+        }
+      }
+
+      // Check for duplicate transaction
+      function isDuplicateTransaction(branchName, managerName, whatsappNumber) {
+        return app.transactions.some(
+          (t) =>
+            t.branchName.toLowerCase() === branchName.toLowerCase() &&
+            t.managerName.toLowerCase() === managerName.toLowerCase() &&
+            t.whatsappNumber === whatsappNumber
+        );
+      }
+
+      // Handle registration submission
+      function handleRegistrationSubmit(e) {
+        e.preventDefault();
+
+        // Validate form
+        if (!validateRegistrationForm()) {
+          return;
+        }
+
+        const branchName = document.getElementById("branch-name").value;
+        const managerName = document.getElementById("manager-name").value;
+        const whatsappNumber = document.getElementById("whatsapp-number").value;
+
+        // Check for duplicate
+        if (
+          !app.isEditing &&
+          isDuplicateTransaction(branchName, managerName, whatsappNumber)
+        ) {
+          showToast("Transaksi dengan data yang sama sudah ada!", "error");
+          return;
+        }
+
+        // Get form data
+        const transactionData = {
+          id: app.isEditing
+            ? app.currentTransaction.id
+            : generateTransactionId(branchName),
+          branchName: branchName,
+          managerName: managerName,
+          whatsappNumber: whatsappNumber,
+          participants: {
+            green: parseInt(document.getElementById("green-count").value) || 0,
+            yellow:
+              parseInt(document.getElementById("yellow-count").value) || 0,
+            red: parseInt(document.getElementById("red-count").value) || 0,
+            white: parseInt(document.getElementById("white-count").value) || 0,
+            citizen:
+              parseInt(document.getElementById("citizen-count").value) || 0,
+          },
+          totalPayment: parseCurrency(
+            document.getElementById("total-payment").value
+          ),
+          totalPaid: app.isEditing ? app.currentTransaction.totalPaid || 0 : 0,
+          date: app.isEditing
+            ? app.currentTransaction.date
+            : new Date().toISOString(),
+          status: app.isEditing ? app.currentTransaction.status : "unpaid",
+        };
+
+        if (app.isEditing) {
+          // Update existing transaction
+          const index = app.transactions.findIndex(
+            (t) => t.id === transactionData.id
+          );
+          if (index !== -1) {
+            app.transactions[index] = transactionData;
+          }
+        } else {
+          // Add to transactions array
+          app.transactions.push(transactionData);
+        }
+
+        // Save to localStorage
+        saveDataToStorage();
+
+        // Reset form
+        resetRegistrationForm();
+
+        // Show success message
+        showToast(
+          app.isEditing
+            ? "Transaksi berhasil diperbarui!"
+            : "Pendaftaran berhasil!",
+          "success"
+        );
+
+        // Update statistics
+        updateAllStatistics();
+      }
+
+      // Validate registration form
+      function validateRegistrationForm() {
+        let isValid = true;
+
+        // Check required fields
+        const requiredFields = [
+          "branch-name",
+          "manager-name",
+          "whatsapp-number",
+        ];
+
+        requiredFields.forEach((fieldId) => {
+          const field = document.getElementById(fieldId);
+          if (!field.value.trim()) {
+            field.classList.add("is-invalid");
+            isValid = false;
+          } else {
+            field.classList.remove("is-invalid");
+          }
+        });
+
+        // Validate WhatsApp number
+        if (!validateWhatsAppNumber()) {
+          isValid = false;
+        }
+
+        // Check if at least one participant is registered
+        const totalParticipants =
+          parseInt(document.getElementById("green-count").value) +
+          parseInt(document.getElementById("yellow-count").value) +
+          parseInt(document.getElementById("red-count").value) +
+          parseInt(document.getElementById("white-count").value) +
+          parseInt(document.getElementById("citizen-count").value);
+
+        if (totalParticipants === 0) {
+          showToast("Harap masukkan setidaknya satu peserta!", "error");
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      // Reset registration form
+      function resetRegistrationForm() {
+        document.getElementById("registration-form").reset();
+        [
+          "green-count",
+          "yellow-count",
+          "red-count",
+          "white-count",
+          "citizen-count",
+        ].forEach((id) => {
+          document.getElementById(id).value = 0;
+        });
+
+        app.currentTransaction = null;
+        app.isEditing = false;
+
+        calculateRegistrationSummary();
+        updateTransactionId();
+      }
+
+      // Show search section
+      function showSearchSection() {
+        document.getElementById("search-section").style.display = "block";
+        resetRegistrationForm();
+      }
+
+      // Hide search section
+      function hideSearchSection() {
+        document.getElementById("search-section").style.display = "none";
+        app.currentTransaction = null;
+        app.isEditing = false;
+        resetRegistrationForm();
+        updateTransactionId();
+      }
+
+      // Load transaction by branch name
+      function loadTransactionByBranch() {
+        const searchBranch = document
+          .getElementById("search-id-input")
+          .value.trim();
+
+        if (!searchBranch) {
+          showToast("Masukkan Nama Ranting!", "error");
+          return;
+        }
+
+        // Find transaction by branch name (case insensitive)
+        const transaction = app.transactions.find(
+          (t) => t.branchName.toLowerCase() === searchBranch.toLowerCase()
+        );
+
+        if (!transaction) {
+          showToast("Transaksi tidak ditemukan!", "error");
+          return;
+        }
+
+        // Load transaction data
+        app.currentTransaction = transaction;
+        app.isEditing = true;
+
+        document.getElementById("transaction-id").value = transaction.id;
+        document.getElementById("branch-name").value = transaction.branchName;
+        document.getElementById("manager-name").value = transaction.managerName;
+        document.getElementById("whatsapp-number").value =
+          transaction.whatsappNumber;
+
+        document.getElementById("green-count").value =
+          transaction.participants.green;
+        document.getElementById("yellow-count").value =
+          transaction.participants.yellow;
+        document.getElementById("red-count").value =
+          transaction.participants.red;
+        document.getElementById("white-count").value =
+          transaction.participants.white;
+        document.getElementById("citizen-count").value =
+          transaction.participants.citizen;
+
+        calculateRegistrationSummary();
+        updatePaymentStatus();
+
+        showToast("Transaksi berhasil dimuat!", "success");
+      }
+
+      // Update payment status
+      function updatePaymentStatus() {
+        if (!app.currentTransaction) return;
+
+        const totalPaid = app.currentTransaction.totalPaid || 0;
+        const totalPayment = app.currentTransaction.totalPayment;
+        const remaining = totalPayment - totalPaid;
+
+        let statusText = "Belum Administrasi";
+        let statusColor = "#ef4444";
+        if (totalPaid > 0 && totalPaid < totalPayment) {
+          statusText = "DP";
+          statusColor = "#f59e0b";
+        } else if (totalPaid >= totalPayment) {
+          statusText = "Lunas";
+          statusColor = "#10b981";
+        }
+
+        document.getElementById("payment-status").value = statusText;
+        document.getElementById("payment-status").style.color = statusColor;
+        document.getElementById("payment-status").style.fontWeight = "bold";
+      }
+
+      // Load payment transactions
+      function loadPaymentTransactions() {
+        const select = document.getElementById("payment-transaction-select");
+        select.innerHTML = '<option value="">-- Pilih Transaksi --</option>';
+
+        // Add all transactions with remaining payment
+        app.transactions.forEach((transaction) => {
+          const totalPaid = transaction.totalPaid || 0;
+          const remaining = transaction.totalPayment - totalPaid;
+
+          if (remaining > 0) {
+            const option = document.createElement("option");
+            option.value = transaction.id;
+            option.textContent = `${transaction.id} - ${
+              transaction.branchName
+            } - Sisa: ${formatCurrency(remaining)}`;
+            select.appendChild(option);
+          }
+        });
+      }
+
+      // Load transaction details
+      function loadTransactionDetails() {
+        const transactionId = document.getElementById(
+          "payment-transaction-select"
+        ).value;
+
+        if (!transactionId) {
+          document.getElementById("payment-amount").value = "";
+          document.getElementById("payment-received").value = "";
+          document.getElementById("payment-change").value = "";
+          updatePaymentDisplay(0, 0);
+          return;
+        }
+
+        const transaction = app.transactions.find(
+          (t) => t.id === transactionId
+        );
+        if (transaction) {
+          const totalPaid = transaction.totalPaid || 0;
+          const remaining = transaction.totalPayment - totalPaid;
+
+          document.getElementById("payment-amount").value =
+            formatCurrency(remaining);
+          calculatePaymentChange();
+        }
+      }
+
+      // Calculate payment change
+      function calculatePaymentChange() {
+        const total =
+          parseCurrency(document.getElementById("payment-amount").value) || 0;
+        const received =
+          parseInt(document.getElementById("payment-received").value) || 0;
+
+        let change = 0;
+        if (received > total) {
+          change = received - total;
+        }
+
+        document.getElementById("payment-change").value =
+          formatCurrency(change);
+        updatePaymentDisplay(total, received);
+      }
+
+      // Update payment display
+      function updatePaymentDisplay(total, received) {
+        const displayTotal = document.getElementById("display-total");
+        const displayReceived = document.getElementById("display-received");
+        const displayStatus = document.getElementById("display-status");
+        const displayRemaining = document.getElementById("display-remaining");
+
+        displayTotal.textContent = formatCurrency(total);
+        displayReceived.textContent = formatCurrency(received);
+
+        if (received === 0) {
+          displayStatus.textContent = "Menunggu Pembayaran";
+          displayStatus.className = "payment-value";
+          displayRemaining.textContent = formatCurrency(total);
+        } else if (received < total) {
+          displayStatus.textContent = "Pembayaran DP";
+          displayStatus.className = "payment-value shortage";
+          displayRemaining.textContent = formatCurrency(total - received);
+        } else {
+          const change = received - total;
+          displayStatus.textContent = `Lengkap - Kembali: ${formatCurrency(
+            change
+          )}`;
+          displayStatus.className = "payment-value excess";
+          displayRemaining.textContent = "Rp 0";
+        }
+      }
+
+      // Handle payment submission
+      function handlePaymentSubmit(e) {
+        e.preventDefault();
+
+        const transactionId = document.getElementById(
+          "payment-transaction-select"
+        ).value;
+        const total =
+          parseCurrency(document.getElementById("payment-amount").value) || 0;
+        const received =
+          parseInt(document.getElementById("payment-received").value) || 0;
+
+        if (!transactionId) {
+          showToast("Pilih transaksi terlebih dahulu!", "error");
+          return;
+        }
+
+        // Find and update transaction
+        const transaction = app.transactions.find(
+          (t) => t.id === transactionId
+        );
+        if (transaction) {
+          const currentPaid = transaction.totalPaid || 0;
+          const newTotalPaid = currentPaid + received;
+          const remaining = transaction.totalPayment - newTotalPaid;
+
+          // Update transaction payment info
+          transaction.totalPaid = newTotalPaid;
+          transaction.lastPaymentDate = new Date().toISOString();
+
+          // Update status
+          if (remaining <= 0) {
+            transaction.status = "paid";
+            transaction.paidDate = new Date().toISOString();
+          } else {
+            transaction.status = "dp";
+          }
+
+          // Add to payment history
+          const paymentRecord = {
+            id: `PAY-${Date.now()}`,
+            transactionId,
+            total,
+            received,
+            change: received > total ? received - total : 0,
+            date: new Date().toISOString(),
+          };
+
+          app.paymentHistory.push(paymentRecord);
+        }
+
+        // Save to localStorage
+        saveDataToStorage();
+
+        // Reset form
+        resetPaymentForm();
+
+        // Show success message
+        showToast("Pembayaran berhasil diproses!", "success");
+
+        // Update displays
+        renderPaymentHistory();
+        loadPaymentTransactions();
+        updateAllStatistics();
+        checkDPNotifications();
+      }
+
+      // Reset payment form
+      function resetPaymentForm() {
+        document.getElementById("payment-form").reset();
+        document.getElementById("payment-amount").value = "";
+        document.getElementById("payment-change").value = "";
+        updatePaymentDisplay(0, 0);
+      }
+
+      // REVISI: Fungsi cetak Nota/Kwitansi dengan gaya Indomaret
+      function printReceipt() {
+        const transactionId = document.getElementById(
+          "payment-transaction-select"
+        ).value;
+
+        if (!transactionId) {
+          showToast("Pilih transaksi terlebih dahulu!", "error");
+          return;
+        }
+
+        const transaction = app.transactions.find(
+          (t) => t.id === transactionId
+        );
+        if (!transaction) return;
+
+        const total =
+          parseCurrency(document.getElementById("payment-amount").value) || 0;
+        const received =
+          parseInt(document.getElementById("payment-received").value) || 0;
+        const change = received > total ? received - total : 0;
+
+        // Gunakan gaya Indomaret untuk struk
+        const receiptContent = document.getElementById("indomaret-receipt");
+        receiptContent.innerHTML = `
+          <div class="indomaret-header">
+            <div class="indomaret-title">STRUK PEMBAYARAN</div>
+            <div class="indomaret-subtitle">${app.settings.orgName}</div>
+            <div class="indomaret-subtitle">${app.settings.orgAddress}</div>
+            <div class="indomaret-subtitle">${app.settings.orgPhone}</div>
+            <div class="indomaret-subtitle">No. ${transaction.id}</div>
+          </div>
+          
+          <div class="indomaret-body">
+            <div class="indomaret-row">
+              <span>Tanggal:</span>
+              <span>${formatDate(new Date().toISOString())}</span>
+            </div>
+            <div class="indomaret-row">
+              <span>Kasir:</span>
+              <span>Admin</span>
+            </div>
+            <div class="indomaret-row">
+              <span>Pelanggan:</span>
+              <span>${transaction.branchName}</span>
+            </div>
+            
+            <div class="indomaret-divider"></div>
+            
+            <div class="indomaret-row">
+              <span>Total Tagihan:</span>
+              <span>${formatCurrency(total)}</span>
+            </div>
+            <div class="indomaret-row">
+              <span>Tunai:</span>
+              <span>${formatCurrency(received)}</span>
+            </div>
+            <div class="indomaret-row indomaret-total">
+              <span>Kembali:</span>
+              <span>${formatCurrency(change)}</span>
+            </div>
+          </div>
+          
+          <div class="indomaret-footer">
+            <div>Terima kasih atas pembayaran Anda</div>
+            <div>Barang yang sudah dibeli tidak dapat dikembalikan</div>
+            <div>Simpan struk ini sebagai bukti pembayaran</div>
+          </div>
+        `;
+
+        // Print receipt
+        window.print();
+      }
+
+      // Get total participants
+      function getTotalParticipants(transaction) {
+        const totalStudents =
+          transaction.participants.green +
+          transaction.participants.yellow +
+          transaction.participants.red +
+          transaction.participants.white;
+
+        return totalStudents + transaction.participants.citizen;
+      }
+
+      // Render payment history
+      function renderPaymentHistory() {
+        const tbody = document.getElementById("payment-history");
+        tbody.innerHTML = "";
+
+        if (app.paymentHistory.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="4" class="text-center">Tidak ada riwayat pembayaran</td></tr>';
+          return;
+        }
+
+        // Show only last 10 transactions
+        const recentPayments = app.paymentHistory.slice(-10).reverse();
+
+        recentPayments.forEach((payment) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${payment.transactionId}</td>
+                    <td>${formatCurrency(payment.total)}</td>
+                    <td>${formatCurrency(payment.received)}</td>
+                    <td>${formatCurrency(payment.change)}</td>
+                `;
+          tbody.appendChild(row);
+        });
+      }
+
+      // Update student fee
+      function updateStudentFee() {
+        const newFee = parseInt(
+          document.getElementById("admin-student-fee").value
+        );
+        if (newFee > 0) {
+          app.fees.student = newFee;
+          saveDataToStorage();
+          updateFees();
+          calculateRegistrationSummary();
+          showToast("Tarif siswa berhasil diperbarui!", "success");
+        } else {
+          showToast("Tarif harus lebih dari 0!", "error");
+        }
+      }
+
+      // Update citizen fee
+      function updateCitizenFee() {
+        const newFee = parseInt(
+          document.getElementById("admin-citizen-fee").value
+        );
+        if (newFee > 0) {
+          app.fees.citizen = newFee;
+          saveDataToStorage();
+          updateFees();
+          calculateRegistrationSummary();
+          showToast("Tarif warga berhasil diperbarui!", "success");
+        } else {
+          showToast("Tarif harus lebih dari 0!", "error");
+        }
+      }
+
+      // Render participants table with advanced search
+      function renderParticipantsTable() {
+        const tbody = document.getElementById("participants-table");
+        tbody.innerHTML = "";
+
+        if (app.transactions.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="11" class="text-center">Tidak ada data peserta</td></tr>';
+          return;
+        }
+
+        const searchTerm = document
+          .getElementById("search-participants")
+          .value.toLowerCase();
+        const statusFilter = document.getElementById("status-filter").value;
+
+        const filteredTransactions = app.transactions.filter((transaction) => {
+          // Filter berdasarkan istilah pencarian
+          const matchesSearch =
+            !searchTerm ||
+            transaction.id.toLowerCase().includes(searchTerm) ||
+            transaction.branchName.toLowerCase().includes(searchTerm) ||
+            transaction.managerName.toLowerCase().includes(searchTerm) ||
+            transaction.whatsappNumber.includes(searchTerm);
+
+          // Filter berdasarkan status
+          let matchesStatus = true;
+          if (statusFilter === "paid") {
+            matchesStatus = transaction.totalPaid >= transaction.totalPayment;
+          } else if (statusFilter === "dp") {
+            matchesStatus =
+              transaction.totalPaid > 0 &&
+              transaction.totalPaid < transaction.totalPayment;
+          } else if (statusFilter === "unpaid") {
+            matchesStatus = transaction.totalPaid === 0;
+          }
+
+          return matchesSearch && matchesStatus;
+        });
+
+        if (filteredTransactions.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="11" class="text-center">Tidak ada data peserta yang cocok dengan filter</td></tr>';
+          return;
+        }
+
+        // Use DocumentFragment for better performance
+        const fragment = document.createDocumentFragment();
+
+        filteredTransactions.forEach((transaction) => {
+          const totalStudents =
+            transaction.participants.green +
+            transaction.participants.yellow +
+            transaction.participants.red +
+            transaction.participants.white;
+
+          const totalParticipants =
+            totalStudents + transaction.participants.citizen;
+
+          const totalPaid = transaction.totalPaid || 0;
+          const remaining = transaction.totalPayment - totalPaid;
+
+          // REVISI: Menentukan status dan badge
+          let statusBadge = "";
+          if (totalPaid >= transaction.totalPayment) {
+            statusBadge = '<span class="badge badge-success">Lunas</span>';
+          } else if (totalPaid > 0) {
+            statusBadge = '<span class="badge badge-warning">DP</span>';
+          } else {
+            statusBadge =
+              '<span class="badge badge-danger">Belum Administrasi</span>';
+          }
+
+          const row = document.createElement("tr");
+          // REVISI: Menambahkan kolom baru
+          row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.branchName}</td>
+                    <td>${transaction.managerName}</td>
+                    <td>${transaction.whatsappNumber}</td>
+                    <td>${totalParticipants}</td>
+                    <td>${formatCurrency(transaction.totalPayment)}</td>
+                    <td>${formatCurrency(totalPaid)}</td>
+                    <td>${formatCurrency(totalPaid)}</td>
+                    <td>${formatCurrency(remaining)}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button class="btn btn-sm btn-info me-1" onclick="viewTransactionDetail('${
+                          transaction.id
+                        }')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning me-1" onclick="openEditModal('${
+                          transaction.id
+                        }')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteTransaction('${
+                          transaction.id
+                        }')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+          fragment.appendChild(row);
+        });
+
+        tbody.appendChild(fragment);
+      }
+
+      // Advanced search function
+      function advancedSearch() {
+        renderParticipantsTable();
+      }
+
+      // Filter invoices
+      function filterInvoices() {
+        const searchTerm = document
+          .getElementById("search-invoice")
+          .value.toLowerCase();
+        const rows = document.querySelectorAll("#invoice-table tr");
+
+        rows.forEach((row) => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(searchTerm) ? "" : "none";
+        });
+      }
+
+      // Render finance table
+      function renderFinanceTable() {
+        const tbody = document.getElementById("finance-table");
+        tbody.innerHTML = "";
+
+        if (app.financeRecords.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="6" class="text-center">Tidak ada data keuangan</td></tr>';
+          return;
+        }
+
+        let balance = 0;
+
+        app.financeRecords.forEach((record) => {
+          if (record.type === "income") {
+            balance += record.amount;
+          } else {
+            balance -= record.amount;
+          }
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${formatDate(record.date)}</td>
+                    <td>${record.description}</td>
+                    <td class="text-success">${
+                      record.type === "income"
+                        ? formatCurrency(record.amount)
+                        : "-"
+                    }</td>
+                    <td class="text-danger">${
+                      record.type === "expense"
+                        ? formatCurrency(record.amount)
+                        : "-"
+                    }</td>
+                    <td class="text-warning">${formatCurrency(balance)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteFinanceRecord('${
+                          record.id
+                        }')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+          tbody.appendChild(row);
+        });
+      }
+
+      // Save finance record
+      function saveFinanceRecord() {
+        const date = document.getElementById("finance-date").value;
+        const description = document.getElementById(
+          "finance-description"
+        ).value;
+        const type = document.getElementById("finance-type").value;
+        const amount = parseInt(
+          document.getElementById("finance-amount").value
+        );
+
+        if (!date || !description || !type || !amount) {
+          showToast("Harap lengkapi semua field!", "error");
+          return;
+        }
+
+        const financeRecord = {
+          id: `FIN-${Date.now()}`,
+          date,
+          description,
+          type,
+          amount,
+          createdAt: new Date().toISOString(),
+        };
+
+        app.financeRecords.push(financeRecord);
+        saveDataToStorage();
+        renderFinanceTable();
+        updateAdministrationStats();
+        updateAllStatistics();
+
+        // Reset form
+        document.getElementById("finance-form").reset();
+
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("finance-modal")
+        );
+        modal.hide();
+
+        showToast("Transaksi keuangan berhasil disimpan!", "success");
+      }
+
+      // Delete finance record
+      function deleteFinanceRecord(recordId) {
+        if (
+          confirm("Apakah Anda yakin ingin menghapus catatan keuangan ini?")
+        ) {
+          app.financeRecords = app.financeRecords.filter(
+            (r) => r.id !== recordId
+          );
+          saveDataToStorage();
+          renderFinanceTable();
+          updateAdministrationStats();
+          updateAllStatistics();
+          showToast("Catatan keuangan berhasil dihapus!", "success");
+        }
+      }
+
+      // Update administration stats
+      function updateAdministrationStats() {
+        let totalIncome = 0;
+        let totalExpense = 0;
+
+        app.transactions.forEach((transaction) => {
+          totalIncome += transaction.totalPaid || 0;
+        });
+
+        app.financeRecords.forEach((record) => {
+          if (record.type === "income") {
+            totalIncome += record.amount;
+          } else {
+            totalExpense += record.amount;
+          }
+        });
+
+        const balance = totalIncome - totalExpense;
+
+        document.getElementById("admin-total-income").textContent =
+          formatCurrency(totalIncome);
+        document.getElementById("admin-total-expense").textContent =
+          formatCurrency(totalExpense);
+        document.getElementById("admin-balance").textContent =
+          formatCurrency(balance);
+      }
+
+      // Update report stats
+      function updateReportStats() {
+        let totalParticipants = 0;
+        let totalStudents = 0;
+        let totalCitizens = 0;
+
+        let totalGreen = 0;
+        let totalYellow = 0;
+        let totalRed = 0;
+        let totalWhite = 0;
+        let totalCitizensCount = 0;
+
+        app.transactions.forEach((transaction) => {
+          const students =
+            transaction.participants.green +
+            transaction.participants.yellow +
+            transaction.participants.red +
+            transaction.participants.white;
+
+          totalStudents += students;
+          totalCitizens += transaction.participants.citizen;
+          totalParticipants += students + transaction.participants.citizen;
+
+          totalGreen += transaction.participants.green;
+          totalYellow += transaction.participants.yellow;
+          totalRed += transaction.participants.red;
+          totalWhite += transaction.participants.white;
+          totalCitizensCount += transaction.participants.citizen;
+        });
+
+        let totalIncome = 0;
+        let totalExpense = 0;
+
+        app.transactions.forEach((transaction) => {
+          totalIncome += transaction.totalPaid || 0;
+        });
+
+        app.financeRecords.forEach((record) => {
+          if (record.type === "income") {
+            totalIncome += record.amount;
+          } else {
+            totalExpense += record.amount;
+          }
+        });
+
+        const balance = totalIncome - totalExpense;
+
+        // Update belt color statistics
+        document.getElementById("report-green-total").textContent = totalGreen;
+        document.getElementById("report-yellow-total").textContent =
+          totalYellow;
+        document.getElementById("report-red-total").textContent = totalRed;
+        document.getElementById("report-white-total").textContent = totalWhite;
+        document.getElementById("report-citizen-total").textContent =
+          totalCitizensCount;
+        document.getElementById("report-all-total").textContent =
+          totalParticipants;
+
+        // Update other statistics
+        document.getElementById("report-total-participants").textContent =
+          totalParticipants;
+        document.getElementById("report-total-students").textContent =
+          totalStudents;
+        document.getElementById("report-total-citizens").textContent =
+          totalCitizens;
+        document.getElementById("report-total-income").textContent =
+          formatCurrency(totalIncome);
+        document.getElementById("report-total-expense").textContent =
+          formatCurrency(totalExpense);
+        document.getElementById("report-balance").textContent =
+          formatCurrency(balance);
+      }
+
+      // Render reports table
+      function renderReportsTable() {
+        const tbody = document.getElementById("reports-table");
+        tbody.innerHTML = "";
+
+        if (app.transactions.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="10" class="text-center">Tidak ada data laporan</td></tr>';
+          return;
+        }
+
+        // Group by branch
+        const branchData = {};
+
+        app.transactions.forEach((transaction) => {
+          if (!branchData[transaction.branchName]) {
+            branchData[transaction.branchName] = {
+              green: 0,
+              yellow: 0,
+              red: 0,
+              white: 0,
+              citizen: 0,
+              totalPayment: 0,
+              totalPaid: 0,
+            };
+          }
+
+          branchData[transaction.branchName].green +=
+            transaction.participants.green;
+          branchData[transaction.branchName].yellow +=
+            transaction.participants.yellow;
+          branchData[transaction.branchName].red +=
+            transaction.participants.red;
+          branchData[transaction.branchName].white +=
+            transaction.participants.white;
+          branchData[transaction.branchName].citizen +=
+            transaction.participants.citizen;
+          branchData[transaction.branchName].totalPayment +=
+            transaction.totalPayment;
+          branchData[transaction.branchName].totalPaid =
+            transaction.totalPaid || 0;
+        });
+
+        // Render rows
+        for (const [branch, data] of Object.entries(branchData)) {
+          const totalParticipants =
+            data.green + data.yellow + data.red + data.white + data.citizen;
+          const isPaid = data.totalPaid >= data.totalPayment;
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${branch}</td>
+                    <td>${data.green}</td>
+                    <td>${data.yellow}</td>
+                    <td>${data.red}</td>
+                    <td>${data.white}</td>
+                    <td>${data.citizen}</td>
+                    <td>${totalParticipants}</td>
+                    <td>${formatCurrency(data.totalPayment)}</td>
+                    <td>${
+                      isPaid
+                        ? '<span class="badge badge-success">Lunas</span>'
+                        : '<span class="badge badge-warning">DP</span>'
+                    }</td>
+                `;
+          tbody.appendChild(row);
+        }
+      }
+
+      // Render invoice table
+      function renderInvoiceTable() {
+        const tbody = document.getElementById("invoice-table");
+        tbody.innerHTML = "";
+
+        if (app.transactions.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="6" class="text-center">Tidak ada data invoice</td></tr>';
+          return;
+        }
+
+        app.transactions.forEach((transaction) => {
+          const totalStudents =
+            transaction.participants.green +
+            transaction.participants.yellow +
+            transaction.participants.red +
+            transaction.participants.white;
+
+          const totalParticipants =
+            totalStudents + transaction.participants.citizen;
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.branchName}</td>
+                    <td>${transaction.managerName}</td>
+                    <td>${totalParticipants}</td>
+                    <td>${formatCurrency(transaction.totalPayment)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="printInvoice('${
+                          transaction.id
+                        }')">
+                            <i class="fas fa-print"></i> Cetak
+                        </button>
+                    </td>
+                `;
+          tbody.appendChild(row);
+        });
+      }
+
+      // Export to CSV
+      function exportToCSV() {
+        if (app.transactions.length === 0) {
+          showToast("Tidak ada data untuk diekspor!", "warning");
+          return;
+        }
+
+        let csv =
+          "Nama Ranting,Sabuk Hijau,Sabuk Kuning,Sabuk Merah,Sabuk Putih,Warga,Total Peserta,Total Pembayaran,Lunas\n";
+
+        // Group by branch
+        const branchData = {};
+
+        app.transactions.forEach((transaction) => {
+          if (!branchData[transaction.branchName]) {
+            branchData[transaction.branchName] = {
+              green: 0,
+              yellow: 0,
+              red: 0,
+              white: 0,
+              citizen: 0,
+              totalPayment: 0,
+              totalPaid: 0,
+              isPaid: false,
+            };
+          }
+
+          branchData[transaction.branchName].green +=
+            transaction.participants.green;
+          branchData[transaction.branchName].yellow +=
+            transaction.participants.yellow;
+          branchData[transaction.branchName].red +=
+            transaction.participants.red;
+          branchData[transaction.branchName].white +=
+            transaction.participants.white;
+          branchData[transaction.branchName].citizen +=
+            transaction.participants.citizen;
+          branchData[transaction.branchName].totalPayment +=
+            transaction.totalPayment;
+          branchData[transaction.branchName].totalPaid =
+            transaction.totalPaid || 0;
+          branchData[transaction.branchName].isPaid =
+            transaction.totalPaid >= transaction.totalPayment;
+        });
+
+        for (const [branch, data] of Object.entries(branchData)) {
+          const totalParticipants =
+            data.green + data.yellow + data.red + data.white + data.citizen;
+
+          csv += `"${branch}",${data.green},${data.yellow},${data.red},${
+            data.white
+          },${data.citizen},${totalParticipants},${formatCurrency(
+            data.totalPayment
+          )},${data.isPaid ? "Lunas" : "DP"}\n`;
+        }
+
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.setAttribute("hidden", "");
+        a.setAttribute("href", url);
+        a.setAttribute(
+          "download",
+          `laporan_ukt_${new Date().toISOString().split("T")[0]}.csv`
+        );
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        showToast("Data berhasil diekspor ke CSV!", "success");
+      }
+
+      // REVISI: Export to PDF dengan tampilan yang lebih rapi
+      function exportToPDF() {
+        if (app.transactions.length === 0) {
+          showToast("Tidak ada data untuk diekspor!", "warning");
+          return;
+        }
+
+        showLoading(true);
+
+        setTimeout(() => {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+
+          // Add title without logo
+          doc.setFontSize(20);
+          doc.setFont("helvetica", "bold");
+          doc.text("LAPORAN PEMBAYARAN UKT", 105, 20, { align: "center" });
+
+          doc.setFontSize(14);
+          doc.setFont("helvetica", "normal");
+          doc.text("Pagar Nusa Bumi Panjalu", 105, 27, { align: "center" });
+
+          doc.setFontSize(12);
+          doc.text(
+            `Tanggal: ${formatDate(new Date().toISOString())}`,
+            105,
+            34,
+            { align: "center" }
+          );
+
+          // Add belt color statistics
+          doc.setFontSize(14);
+          doc.setFont("helvetica", "bold");
+          doc.text("Statistik Peserta per Sabuk", 14, 50);
+
+          let totalGreen = 0;
+          let totalYellow = 0;
+          let totalRed = 0;
+          let totalWhite = 0;
+          let totalCitizensCount = 0;
+
+          app.transactions.forEach((transaction) => {
+            totalGreen += transaction.participants.green;
+            totalYellow += transaction.participants.yellow;
+            totalRed += transaction.participants.red;
+            totalWhite += transaction.participants.white;
+            totalCitizensCount += transaction.participants.citizen;
+          });
+
+          doc.setFontSize(10);
+          doc.setFont("helvetica", "normal");
+          doc.text(`Sabuk Hijau: ${totalGreen}`, 14, 60);
+          doc.text(`Sabuk Kuning: ${totalYellow}`, 14, 67);
+          doc.text(`Sabuk Merah: ${totalRed}`, 14, 74);
+          doc.text(`Sabuk Putih: ${totalWhite}`, 14, 81);
+          doc.text(`Warga: ${totalCitizensCount}`, 14, 88);
+          doc.text(
+            `Total Semua: ${
+              totalGreen +
+              totalYellow +
+              totalRed +
+              totalWhite +
+              totalCitizensCount
+            }`,
+            14,
+            95
+          );
+
+          // Prepare table data
+          const tableData = [];
+
+          // Group by branch
+          const branchData = {};
+
+          app.transactions.forEach((transaction) => {
+            if (!branchData[transaction.branchName]) {
+              branchData[transaction.branchName] = {
+                green: 0,
+                yellow: 0,
+                red: 0,
+                white: 0,
+                citizen: 0,
+                totalPayment: 0,
+                totalPaid: 0,
+                isPaid: false,
+              };
+            }
+
+            branchData[transaction.branchName].green +=
+              transaction.participants.green;
+            branchData[transaction.branchName].yellow +=
+              transaction.participants.yellow;
+            branchData[transaction.branchName].red +=
+              transaction.participants.red;
+            branchData[transaction.branchName].white +=
+              transaction.participants.white;
+            branchData[transaction.branchName].citizen +=
+              transaction.participants.citizen;
+            branchData[transaction.branchName].totalPayment +=
+              transaction.totalPayment;
+            branchData[transaction.branchName].totalPaid =
+              transaction.totalPaid || 0;
+            branchData[transaction.branchName].isPaid =
+              transaction.totalPaid >= transaction.totalPayment;
+          });
+
+          for (const [branch, data] of Object.entries(branchData)) {
+            const totalParticipants =
+              data.green + data.yellow + data.red + data.white + data.citizen;
+
+            tableData.push([
+              branch,
+              data.green.toString(),
+              data.yellow.toString(),
+              data.red.toString(),
+              data.white.toString(),
+              data.citizen.toString(),
+              totalParticipants.toString(),
+              formatCurrency(data.totalPayment),
+              data.isPaid ? "Lunas" : "DP",
+            ]);
+          }
+
+          // Add table
+          doc.autoTable({
+            head: [
+              [
+                "Nama Ranting",
+                "Hijau",
+                "Kuning",
+                "Merah",
+                "Putih",
+                "Warga",
+                "Total",
+                "Pembayaran",
+                "Lunas",
+              ],
+            ],
+            body: tableData,
+            startY: 105,
+            styles: {
+              font: "helvetica",
+              fontSize: 10,
+              cellPadding: 3,
+            },
+            headStyles: {
+              fillColor: [30, 58, 138],
+              textColor: 255,
+            },
+          });
+
+          // Add summary
+          const finalY = doc.lastAutoTable.finalY + 10;
+
+          let totalParticipants = 0;
+          let totalStudents = 0;
+          let totalCitizens = 0;
+          let totalIncome = 0;
+
+          app.transactions.forEach((transaction) => {
+            const students =
+              transaction.participants.green +
+              transaction.participants.yellow +
+              transaction.participants.red +
+              transaction.participants.white;
+
+            totalStudents += students;
+            totalCitizens += transaction.participants.citizen;
+            totalParticipants += students + transaction.participants.citizen;
+
+            totalIncome += transaction.totalPaid || 0;
+          });
+
+          doc.setFontSize(12);
+          doc.setFont("helvetica", "bold");
+          doc.text("Ringkasan:", 14, finalY);
+
+          doc.setFontSize(10);
+          doc.setFont("helvetica", "normal");
+          doc.text(`Total Peserta: ${totalParticipants}`, 14, finalY + 7);
+          doc.text(`Total Siswa: ${totalStudents}`, 14, finalY + 14);
+          doc.text(`Total Warga: ${totalCitizens}`, 14, finalY + 21);
+          doc.text(
+            `Total Pemasukan: ${formatCurrency(totalIncome)}`,
+            14,
+            finalY + 28
+          );
+
+          // Add signature
+          doc.setFontSize(10);
+          doc.setFont("helvetica", "bold");
+          doc.text("Mengetahui,", 140, finalY + 40);
+          doc.text(app.settings.orgName, 140, finalY + 60);
+
+          // Draw signature line
+          doc.line(140, finalY + 55, 190, finalY + 55);
+
+          // Save PDF
+          doc.save(`laporan_ukt_${new Date().toISOString().split("T")[0]}.pdf`);
+
+          showLoading(false);
+          showToast("Data berhasil diekspor ke PDF!", "success");
+        }, 500);
+      }
+
+      // Update dashboard stats
+      function updateDashboardStats() {
+        let totalParticipants = 0;
+        let totalIncome = 0;
+        let totalStudents = 0;
+        let totalCitizens = 0;
+        const branches = new Set();
+
+        app.transactions.forEach((transaction) => {
+          const students =
+            transaction.participants.green +
+            transaction.participants.yellow +
+            transaction.participants.red +
+            transaction.participants.white;
+
+          totalStudents += students;
+          totalCitizens += transaction.participants.citizen;
+          totalParticipants += students + transaction.participants.citizen;
+
+          totalIncome += transaction.totalPaid || 0;
+          branches.add(transaction.branchName);
+        });
+
+        document.getElementById("dashboard-total").textContent =
+          totalParticipants;
+        document.getElementById("dashboard-income").textContent =
+          formatCurrency(totalIncome);
+        document.getElementById("stat-students").textContent = totalStudents;
+        document.getElementById("stat-citizens").textContent = totalCitizens;
+        document.getElementById("stat-branches").textContent = branches.size;
+        document.getElementById("stat-transactions").textContent =
+          app.transactions.length;
+        document.getElementById("stat-balance").textContent = formatCurrency(
+          totalIncome - getTotalExpense()
+        );
+      }
+
+      // Get total expense
+      function getTotalExpense() {
+        let totalExpense = 0;
+
+        app.financeRecords.forEach((record) => {
+          if (record.type === "expense") {
+            totalExpense += record.amount;
+          }
+        });
+
+        return totalExpense;
+      }
+
+      // Update all statistics
+      function updateAllStatistics() {
+        updateDashboardStats();
+        updateReportStats();
+        updateAdministrationStats();
+      }
+
+      // View transaction detail
+      function viewTransactionDetail(transactionId) {
+        const transaction = app.transactions.find(
+          (t) => t.id === transactionId
+        );
+        if (!transaction) return;
+
+        const totalStudents =
+          transaction.participants.green +
+          transaction.participants.yellow +
+          transaction.participants.red +
+          transaction.participants.white;
+
+        const totalParticipants =
+          totalStudents + transaction.participants.citizen;
+
+        // Create detail modal content
+        const modalHtml = `
+                <div class="modal fade" id="detail-modal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content" style="background-color: var(--dark-bg);">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detail Transaksi</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p><strong>ID Transaksi:</strong> ${
+                                          transaction.id
+                                        }</p>
+                                        <p><strong>Nama Ranting:</strong> ${
+                                          transaction.branchName
+                                        }</p>
+                                        <p><strong>Nama Pengurus:</strong> ${
+                                          transaction.managerName
+                                        }</p>
+                                        <p><strong>No. WhatsApp:</strong> ${
+                                          transaction.whatsappNumber
+                                        }</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Tanggal:</strong> ${formatDate(
+                                          transaction.date
+                                        )}</p>
+                                        <p><strong>Total Peserta:</strong> ${totalParticipants}</p>
+                                        <p><strong>Total Pembayaran:</strong> ${formatCurrency(
+                                          transaction.totalPayment
+                                        )}</p>
+                                        <p><strong>Status:</strong> ${getTransactionStatus(
+                                          transaction
+                                        )}</p>
+                                    </div>
+                                </div>
+                                
+                                <h5 class="mb-3">Rincian Peserta</h5>
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Kategori</th>
+                                            <th>Jumlah</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Sabuk Hijau</td>
+                                            <td>${
+                                              transaction.participants.green
+                                            }</td>
+                                            <td>${formatCurrency(
+                                              transaction.participants.green *
+                                                app.fees.student
+                                            )}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sabuk Kuning</td>
+                                            <td>${
+                                              transaction.participants.yellow
+                                            }</td>
+                                            <td>${formatCurrency(
+                                              transaction.participants.yellow *
+                                                app.fees.student
+                                            )}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sabuk Merah</td>
+                                            <td>${
+                                              transaction.participants.red
+                                            }</td>
+                                            <td>${formatCurrency(
+                                              transaction.participants.red *
+                                                app.fees.student
+                                            )}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sabuk Putih</td>
+                                            <td>${
+                                              transaction.participants.white
+                                            }</td>
+                                            <td>${formatCurrency(
+                                              transaction.participants.white *
+                                                app.fees.student
+                                            )}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Warga</td>
+                                            <td>${
+                                              transaction.participants.citizen
+                                            }</td>
+                                            <td>${formatCurrency(
+                                              transaction.participants.citizen *
+                                                app.fees.citizen
+                                            )}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                                <h5 class="mb-3 mt-4">Rincian Pembayaran</h5>
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Total Tagihan</th>
+                                            <th>Sudah Dibayar</th>
+                                            <th>Sisa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>${formatCurrency(
+                                              transaction.totalPayment
+                                            )}</td>
+                                            <td>${formatCurrency(
+                                              transaction.totalPaid || 0
+                                            )}</td>
+                                            <td>${formatCurrency(
+                                              transaction.totalPayment -
+                                                (transaction.totalPaid || 0)
+                                            )}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                <button type="button" class="btn btn-warning" onclick="printInvoice('${
+                                  transaction.id
+                                }')">
+                                    <i class="fas fa-print"></i> Cetak Invoice
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        // Remove existing modal if any
+        const existingModal = document.getElementById("detail-modal");
+        if (existingModal) {
+          existingModal.remove();
+        }
+
+        // Add modal to body
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+
+        // Show modal
+        const modal = new bootstrap.Modal(
+          document.getElementById("detail-modal")
+        );
+        modal.show();
+      }
+
+      // Get transaction status
+      function getTransactionStatus(transaction) {
+        const totalPaid = transaction.totalPaid || 0;
+
+        if (totalPaid === 0) {
+          return '<span class="badge badge-danger">Belum Administrasi</span>';
+        } else if (totalPaid < transaction.totalPayment) {
+          return '<span class="badge badge-warning">DP</span>';
+        } else {
+          return '<span class="badge badge-success">Lunas</span>';
+        }
+      }
+
+      // Delete transaction
+      function deleteTransaction(transactionId) {
+        if (confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) {
+          app.transactions = app.transactions.filter(
+            (t) => t.id !== transactionId
+          );
+          saveDataToStorage();
+          renderParticipantsTable();
+          updateAllStatistics();
+          showToast("Transaksi berhasil dihapus!", "success");
+        }
+      }
+
+      // REVISI: Fungsi untuk membuka modal edit
+      function openEditModal(transactionId) {
+        const transaction = app.transactions.find(
+          (t) => t.id === transactionId
+        );
+        if (!transaction) return;
+
+        // Isi form modal dengan data transaksi
+        document.getElementById("edit-transaction-id").value = transaction.id;
+        document.getElementById("edit-branch-name").value =
+          transaction.branchName;
+        document.getElementById("edit-manager-name").value =
+          transaction.managerName;
+
+        document.getElementById("edit-green-count").value =
+          transaction.participants.green;
+        document.getElementById("edit-yellow-count").value =
+          transaction.participants.yellow;
+        document.getElementById("edit-red-count").value =
+          transaction.participants.red;
+        document.getElementById("edit-white-count").value =
+          transaction.participants.white;
+        document.getElementById("edit-citizen-count").value =
+          transaction.participants.citizen;
+
+        calculateEditSummary();
+
+        // Tampilkan modal
+        const modal = new bootstrap.Modal(
+          document.getElementById("edit-modal")
+        );
+        modal.show();
+      }
+
+      // REVISI: Fungsi untuk menghitung ringkasan di modal edit
+      function calculateEditSummary() {
+        const green =
+          parseInt(document.getElementById("edit-green-count").value) || 0;
+        const yellow =
+          parseInt(document.getElementById("edit-yellow-count").value) || 0;
+        const red =
+          parseInt(document.getElementById("edit-red-count").value) || 0;
+        const white =
+          parseInt(document.getElementById("edit-white-count").value) || 0;
+        const citizen =
+          parseInt(document.getElementById("edit-citizen-count").value) || 0;
+
+        const totalStudents = green + yellow + red + white;
+        const totalParticipants = totalStudents + citizen;
+        const totalPayment =
+          totalStudents * app.fees.student + citizen * app.fees.citizen;
+
+        document.getElementById("edit-total-participants").value =
+          totalParticipants;
+        document.getElementById("edit-total-payment").value =
+          formatCurrency(totalPayment);
+      }
+
+      // REVISI: Fungsi untuk menyimpan hasil edit
+      function handleEditSubmit() {
+        const transactionId = document.getElementById(
+          "edit-transaction-id"
+        ).value;
+        const transactionIndex = app.transactions.findIndex(
+          (t) => t.id === transactionId
+        );
+
+        if (transactionIndex === -1) {
+          showToast("Transaksi tidak ditemukan!", "error");
+          return;
+        }
+
+        // Konfirmasi perubahan
+        if (
+          !confirm(
+            "Apakah Anda yakin ingin menyimpan perubahan? Total pembayaran akan diperbarui."
+          )
+        ) {
+          return;
+        }
+
+        const transaction = app.transactions[transactionIndex];
+        const oldTotalPayment = transaction.totalPayment;
+
+        // Update data peserta
+        transaction.participants.green =
+          parseInt(document.getElementById("edit-green-count").value) || 0;
+        transaction.participants.yellow =
+          parseInt(document.getElementById("edit-yellow-count").value) || 0;
+        transaction.participants.red =
+          parseInt(document.getElementById("edit-red-count").value) || 0;
+        transaction.participants.white =
+          parseInt(document.getElementById("edit-white-count").value) || 0;
+        transaction.participants.citizen =
+          parseInt(document.getElementById("edit-citizen-count").value) || 0;
+
+        // Hitung ulang total pembayaran
+        const totalStudents =
+          transaction.participants.green +
+          transaction.participants.yellow +
+          transaction.participants.red +
+          transaction.participants.white;
+        const totalParticipants =
+          totalStudents + transaction.participants.citizen;
+        transaction.totalPayment =
+          totalStudents * app.fees.student +
+          transaction.participants.citizen * app.fees.citizen;
+
+        // Jika total pembayaran berkurang dan lebih kecil dari yang sudah dibayar, sesuaikan statusnya
+        if (transaction.totalPayment < (transaction.totalPaid || 0)) {
+          if (
+            confirm(
+              'Total pembayaran baru lebih kecil dari yang sudah dibayar. Status akan diatur ulang ke "Lunas" dan pembayaran akan disesuaikan. Lanjutkan?'
+            )
+          ) {
+            transaction.totalPaid = transaction.totalPayment;
+            transaction.status = "paid";
+          } else {
+            // Batalkan penyimpanan jika user tidak setuju
+            showToast("Perubahan dibatalkan.", "warning");
+            return;
+          }
+        } else {
+          // Jika pembayaran bertambah, status mungkin berubah dari Lunas ke DP
+          if (
+            transaction.status === "paid" &&
+            transaction.totalPayment > transaction.totalPaid
+          ) {
+            transaction.status = "dp";
+          }
+        }
+
+        // Simpan perubahan
+        saveDataToStorage();
+
+        // Tutup modal
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("edit-modal")
+        );
+        modal.hide();
+
+        // Tampilkan pesan sukses
+        showToast("Data peserta berhasil diperbarui!", "success");
+
+        // Perbarui tampilan
+        renderParticipantsTable();
+        updateAllStatistics();
+      }
+
+      // Load settings
+      function loadSettings() {
+        document.getElementById("org-name").value = app.settings.orgName;
+        document.getElementById("org-address").value = app.settings.orgAddress;
+        document.getElementById("org-phone").value = app.settings.orgPhone;
+        document.getElementById("org-email").value = app.settings.orgEmail;
+      }
+
+      // Save settings
+      function saveSettings() {
+        app.settings.orgName = document.getElementById("org-name").value;
+        app.settings.orgAddress = document.getElementById("org-address").value;
+        app.settings.orgPhone = document.getElementById("org-phone").value;
+        app.settings.orgEmail = document.getElementById("org-email").value;
+
+        saveDataToStorage();
+        showToast("Pengaturan berhasil disimpan!", "success");
+      }
+
+      // Clear transactions
+      function clearTransactions() {
+        if (
+          confirm(
+            "Apakah Anda yakin ingin menghapus semua data transaksi? Tindakan ini tidak dapat dibatalkan!"
+          )
+        ) {
+          app.transactions = [];
+          saveDataToStorage();
+          updateAllStatistics();
+          showToast("Semua data transaksi berhasil dihapus!", "success");
+        }
+      }
+
+      // Clear finance records
+      function clearFinanceRecords() {
+        if (
+          confirm(
+            "Apakah Anda yakin ingin menghapus semua data keuangan? Tindakan ini tidak dapat dibatalkan!"
+          )
+        ) {
+          app.financeRecords = [];
+          app.paymentHistory = [];
+          saveDataToStorage();
+          updateAllStatistics();
+          showToast("Semua data keuangan berhasil dihapus!", "success");
+        }
+      }
+
+      // Backup data
+      function backupData() {
+        const backupData = {
+          transactions: app.transactions,
+          financeRecords: app.financeRecords,
+          paymentHistory: app.paymentHistory,
+          fees: app.fees,
+          settings: app.settings,
+          backupDate: new Date().toISOString(),
+        };
+
+        const dataStr = JSON.stringify(backupData, null, 2);
+        const dataUri =
+          "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+        const exportFileDefaultName = `simpantu_backup_${
+          new Date().toISOString().split("T")[0]
+        }.json`;
+
+        const linkElement = document.createElement("a");
+        linkElement.setAttribute("href", dataUri);
+        linkElement.setAttribute("download", exportFileDefaultName);
+        linkElement.click();
+
+        showToast("Backup data berhasil dibuat!", "success");
+      }
+
+      // Restore data
+      function restoreData(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+          try {
+            const backupData = JSON.parse(event.target.result);
+
+            if (
+              confirm(
+                "Apakah Anda yakin ingin mengembalikan data dari backup? Data saat ini akan ditimpa."
+              )
+            ) {
+              app.transactions = backupData.transactions || [];
+              app.financeRecords = backupData.financeRecords || [];
+              app.paymentHistory = backupData.paymentHistory || [];
+              app.fees = backupData.fees || { student: 65000, citizen: 115000 };
+              app.settings = backupData.settings || {
+                orgName: "Pagar Nusa Bumi Panjalu",
+                orgAddress: "Jl. Pagar Nusa No. 1, Bumi Panjalu",
+                orgPhone: "(0265) 123456",
+                orgEmail: "info@pagarnusabumipanjalu.or.id",
+              };
+
+              saveDataToStorage();
+              updateAllStatistics();
+
+              showToast("Data berhasil dikembalikan dari backup!", "success");
+            }
+          } catch (error) {
+            showToast("Format file backup tidak valid!", "error");
+          }
+        };
+
+        reader.readAsText(file);
+        // Reset file input
+        e.target.value = "";
+      }
+
+      // Print invoice
+      function printInvoice(transactionId) {
+        const transaction = app.transactions.find(
+          (t) => t.id === transactionId
+        );
+
+        if (!transaction) return;
+
+        const totalStudents =
+          transaction.participants.green +
+          transaction.participants.yellow +
+          transaction.participants.red +
+          transaction.participants.white;
+
+        const totalParticipants =
+          totalStudents + transaction.participants.citizen;
+
+        // Gunakan tampilan nota/kwitansi yang lebih profesional
+        const receiptContent = document.getElementById("receipt-note");
+        if (receiptContent) {
+          receiptContent.innerHTML = `
+                    <div class="receipt-header">
+                        <div class="receipt-title">KWITANSI PEMBAYARAN UKT</div>
+                        <div class="receipt-subtitle">${
+                          app.settings.orgName
+                        }</div>
+                        <div class="receipt-subtitle">${
+                          app.settings.orgAddress
+                        }</div>
+                        <div class="receipt-subtitle">${
+                          app.settings.orgPhone
+                        }</div>
+                    </div>
+                    
+                    <div class="receipt-body">
+                        <div class="receipt-row">
+                            <span>No. Kwitansi:</span>
+                            <span>${transaction.id}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Tanggal:</span>
+                            <span>${formatDate(transaction.date)}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Terima Dari:</span>
+                            <span>${transaction.branchName}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Uang Sejumlah:</span>
+                            <span>${formatCurrency(
+                              transaction.totalPaid || 0
+                            )}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Untuk Pembayaran:</span>
+                            <span>Ujian Kenaikan Tingkat</span>
+                        </div>
+                        
+                        <div class="receipt-divider"></div>
+                        
+                        <div style="margin-top: 15px; margin-bottom: 10px; border-top: 1px dashed #000; padding-top: 10px;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">Rincian Peserta:</div>
+                            <div class="receipt-row">
+                                <span>Sabuk Hijau:</span>
+                                <span>${
+                                  transaction.participants.green
+                                } x ${formatCurrency(app.fees.student)}</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Sabuk Kuning:</span>
+                                <span>${
+                                  transaction.participants.yellow
+                                } x ${formatCurrency(app.fees.student)}</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Sabuk Merah:</span>
+                                <span>${
+                                  transaction.participants.red
+                                } x ${formatCurrency(app.fees.student)}</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Sabuk Putih:</span>
+                                <span>${
+                                  transaction.participants.white
+                                } x ${formatCurrency(app.fees.student)}</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Warga:</span>
+                                <span>${
+                                  transaction.participants.citizen
+                                } x ${formatCurrency(app.fees.citizen)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="receipt-total">
+                            <div class="receipt-row">
+                                <span>Total Peserta:</span>
+                                <span>${totalParticipants}</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Total Pembayaran:</span>
+                                <span>${formatCurrency(
+                                  transaction.totalPayment
+                                )}</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Sudah Dibayar:</span>
+                                <span>${formatCurrency(
+                                  transaction.totalPaid || 0
+                                )}</span>
+                            </div>
+                            <div class="receipt-row">
+                                <span>Sisa:</span>
+                                <span>${formatCurrency(
+                                  transaction.totalPayment -
+                                    (transaction.totalPaid || 0)
+                                )}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="receipt-footer">
+                        <p>Terima kasih atas kepercayaan Anda.</p>
+                        <div class="signature-section">
+                            <div class="signature-box">
+                                <div class="signature-line"></div>
+                                <div class="signature-label">Pembayar</div>
+                            </div>
+                            <div class="signature-box">
+                                <div class="signature-line"></div>
+                                <div class="signature-label">Panitia, ${
+                                  app.settings.orgName
+                                }</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+          // Print receipt
+          window.print();
+        }
+      }
+
+      // Show DP Details Modal
+      function showDPDetails() {
+        const dpTransactions = app.transactions.filter(
+          (t) => t.status === "dp"
+        );
+
+        if (dpTransactions.length === 0) {
+          showToast("Tidak ada pembayaran DP yang tertunda", "info");
+          return;
+        }
+
+        // Buat modal untuk menampilkan detail DP
+        const modalHtml = `
+                <div class="modal fade" id="dp-details-modal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content" style="background-color: var(--dark-bg);">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detail Pembayaran DP Tertunda</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID Transaksi</th>
+                                                <th>Nama Ranting</th>
+                                                <th>Total Pembayaran</th>
+                                                <th>Sudah Dibayar</th>
+                                                <th>Sisa</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${dpTransactions
+                                              .map(
+                                                (t) => `
+                                                <tr>
+                                                    <td>${t.id}</td>
+                                                    <td>${t.branchName}</td>
+                                                    <td>${formatCurrency(
+                                                      t.totalPayment
+                                                    )}</td>
+                                                    <td>${formatCurrency(
+                                                      t.totalPaid || 0
+                                                    )}</td>
+                                                    <td>${formatCurrency(
+                                                      t.totalPayment -
+                                                        (t.totalPaid || 0)
+                                                    )}</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-primary" onclick="processPaymentFromModal('${
+                                                          t.id
+                                                        }')">
+                                                            <i class="fas fa-money-bill-wave"></i> Bayar
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            `
+                                              )
+                                              .join("")}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        // Hapus modal yang ada jika ada
+        const existingModal = document.getElementById("dp-details-modal");
+        if (existingModal) {
+          existingModal.remove();
+        }
+
+        // Tambahkan modal ke body
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+
+        // Tampilkan modal
+        const modal = new bootstrap.Modal(
+          document.getElementById("dp-details-modal")
+        );
+        modal.show();
+      }
+
+      // Process payment from modal
+      function processPaymentFromModal(transactionId) {
+        // Tutup modal DP
+        const dpModal = bootstrap.Modal.getInstance(
+          document.getElementById("dp-details-modal")
+        );
+        if (dpModal) {
+          dpModal.hide();
+        }
+
+        // Buka halaman administrasi
+        showPage("administration");
+
+        // Set transaksi yang dipilih di dropdown pembayaran
+        setTimeout(() => {
+          document.getElementById("payment-transaction-select").value =
+            transactionId;
+          loadTransactionDetails();
+        }, 500);
+      }
+
+      // Show/Hide notification badge
+      function showNotificationBadge(text) {
+        const badge = document.getElementById("notification-badge");
+        const textSpan = document.getElementById("notification-text");
+        textSpan.textContent = text;
+        badge.classList.add("show");
+      }
+
+      function hideNotificationBadge() {
+        const badge = document.getElementById("notification-badge");
+        badge.classList.remove("show");
+      }
+
+      // Utility functions
+      function formatCurrency(amount) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+        }).format(amount);
+      }
+
+      function parseCurrency(formattedAmount) {
+        return parseInt(formattedAmount.replace(/[^\d]/g, "")) || 0;
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("id-ID");
+      }
+
+      function showToast(message, type = "info") {
+        const toastContainer = document.querySelector(".toast-container");
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.setAttribute("role", "alert");
+        toast.innerHTML = `
+                <div class="toast-body">
+                    ${message}
+                </div>
+            `;
+
+        toastContainer.appendChild(toast);
+
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+
+        // Remove toast after it's hidden
+        toast.addEventListener("hidden.bs.toast", () => {
+          toast.remove();
+        });
+      }
+
+      function showLoading(show) {
+        const loadingSpinner = document.querySelector(".loading-spinner");
+        loadingSpinner.style.display = show ? "flex" : "none";
+      }
+
+      // Simple encryption/decryption (for demonstration, not for highly sensitive data)
+      function encryptData(data) {
+        return btoa(JSON.stringify(data));
+      }
+
+      function decryptData(encryptedData) {
+        try {
+          return JSON.parse(atob(encryptedData));
+        } catch (e) {
+          console.error("Failed to decrypt data", e);
+          return null;
+        }
+      }
+
+      // Initialize application when DOM is ready
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>
